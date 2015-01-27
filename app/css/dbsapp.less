@@ -1,0 +1,122 @@
+@import 'dbsapp.3d.less';
+@import 'dbsapp.editor.less';
+
+/**
+ * variables
+ */
+@row-min-height: 200px;
+
+/**
+ * mixins
+ */
+.mix-linear-gradient(@color1, @color2) {
+	background: -webkit-linear-gradient(@color1, @color2);
+  	background: -o-linear-gradient(@color1, @color2); 
+  	background: -moz-linear-gradient(@color1, @color2);
+  	background: linear-gradient(@color1, @color2);
+}
+
+// layout
+html, body {
+	height: 100%;
+	background-color: @bkg-color;
+	color: @font-color;
+	font-family: Verdana;
+}
+
+#dbsapp-nav {
+	width: @screen-width;
+	height: 40px;
+	color: @menu-color;
+	margin: 10px auto;
+	padding: 0 30px;
+	font-weight: lighter;
+
+	.dbsapp-menuitem {
+		padding-left: 10px;
+	}
+}
+
+#dbsapp-main-view {
+	width: @screen-width;
+	height: 80%;
+	margin: 30px auto;
+}
+
+.dbsapp-dragged-over {
+	//border: 2px red solid;
+}
+
+.dbsapp-page-active {
+	z-index: 200;
+	.dbsapp-row {
+		background-color: rgba(255, 255, 255, 0.1);
+	}
+}
+
+.dbsapp-row {
+	padding: 10px;
+	min-height: @row-min-height;
+
+	&:nth-of-type(1) {
+		min-height: @row-min-height * 2;
+	}
+}
+
+.dbsapp-cell {
+	height: 100%;
+	background-color: transparent;
+	padding: 0 5px;
+
+	// div container for chart
+	.dbsapp-chart-settings {
+		background-color: rgba(255, 255, 255, 0.05);
+		margin: auto;
+		height: 100%;
+		min-height: @row-min-height;
+	}
+}
+
+.dbsapp-chart-settings > span.fa {
+	color: @menu-color;
+	padding: 5px;
+	font-size: 18px;
+
+	position: absolute;
+	top: 0px;
+
+	&:hover {
+		color: @blue;
+		cursor: pointer;
+	}
+}
+
+.dbsapp-dropdown {
+	cursor: pointer;
+}
+
+.dbsapp-dropdown-menu {
+	position: absolute;
+	top: 20px;
+	width: 200px;
+
+
+	background-color: @editor-bkg-color;
+	padding: 5px 0 5px 10px;
+
+
+	li {
+		list-style: none;
+		padding: 2px;
+		
+		[role="menuitem"] {
+			color: @menu-color;
+			text-decoration: none;
+			cursor: pointer;
+
+			&:hover {
+				color: @a-hover-color;
+			}
+		}
+	}
+}

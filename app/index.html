@@ -1,0 +1,80 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+ 	<meta charset="utf-8">
+	<title>dashboard example</title>
+	<meta name="description" content="dashboards.js">
+	<meta name="author" content=":stepan">
+	
+	<!-- build:css ../lib/css/dbs.css -->
+	<link rel="stylesheet" href="../src/css/dbs.css">
+	<!-- /build -->
+	<!-- build:css ./css/fontawesome/css/font-awesome.min.css -->
+	<link rel="stylesheet" href="../bower_components/fontawesome/css/font-awesome.min.css">
+	<!-- /build -->
+	<!-- build:css ./css/bootstrap/css/bootstrap.min.css -->
+	<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<!-- /build -->
+	<!-- build:css ./css/bootstrap/css/bootstrap-theme.min.css -->
+	<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+	<!-- /build -->
+	<link rel="stylesheet" href="./css/dbsapp.css">
+</head>
+
+<body ng-app="dbsApp" ng-controller="MainCtrl">
+	<section id="dbsapp-nav" ng-controller="MenuCtrl">
+		<div class="pull-left">
+			<div class="dropdown">
+			  <span class="dbsapp-dropdown" aria-haspopup="true" role="button" aria-expanded="false" ng-click="showDropdown = !showDropdown">
+			    {{grid[selectedPage - 1].pageTitle}} <i class="caret"></i>
+			  </span>
+			  <ul class="dbsapp-dropdown-menu" role="menu" aria-labelledby="dLabel" ng-show="showDropdown">
+			  	<li role="presentation" ng-repeat="value in grid">
+			  		<span role="menuitem" tabindex="-1" ng-click="selectPage(value.page)">{{value.pageTitle}}</span>
+			  	</li>
+			  </ul>
+			</div>
+		</div>
+	</section>
+	<section id="dbsapp-main-view" ng-view>
+	</section>
+
+	<!-- build:js ./js/d3.min.js -->
+	<script src="../bower_components/d3/d3.js"></script>
+	<!-- /build -->
+	<!-- build:js ./js/angular.min.js -->
+	<script src="../bower_components/angular/angular.js"></script>
+	<!-- /build -->
+	<!-- build:js ./js/angular-route.min.js -->
+	<script src="../bower_components/angular-route/angular-route.js"></script>
+	<!-- /build -->
+	<!-- build:js ./js/angular-resource.min.js -->
+	<script src="../bower_components/angular-resource/angular-resource.js"></script>
+	<!-- /build -->
+	<!-- build:js ../lib/dashboards.min.js -->
+	<script src="../src/dbs.js"></script>
+	<script src="../src/dbs.utils.js"></script>
+	<script src="../src/dbs.types.js"></script>
+	<script src="../src/dbs.types.gauge.js"></script>
+	<script src="../src/dbs.types.semaphore.js"></script>
+	<script src="../src/dbs.types.indicator.js"></script>
+	<script src="../src/dbs.types.number.js"></script>
+	<script src="../src/dbs.types.arcone.js"></script>
+	<script src="../src/dbs.types.bar.js"></script>
+	<script src="../src/dbs.types.stackedbar.js"></script>
+	<script src="../src/dbs.types.line.js"></script>
+	<script src="../src/dbs.types.pie.js"></script>
+	<!-- /build -->
+	<!-- build:js ./js/dbsapp.min.js -->
+	<script src="./js/dbsapp.js"></script>
+	<script src="./js/dbsapp.ctrls.js"></script>
+	<script src="./js/dbsapp.srvcs.js"></script>
+	<script src="./js/dbsapp.srvcs.rest.js"></script>
+	<script src="./js/dbsapp.srvcs.local.js"></script>
+	<script src="./js/dbsapp.srvcs.editor.js"></script>
+	<script src="./js/dbsapp.drtvs.js"></script>
+	<script src="./js/dbsapp.drtvs.chart.js"></script>
+	<!-- /build -->
+</body>
+</html>

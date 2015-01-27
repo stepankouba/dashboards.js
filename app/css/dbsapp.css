@@ -1,0 +1,172 @@
+/**
+ * mixins
+ */
+/**
+ * variables
+ */
+/**
+ * classes
+ */
+.dbsapp-page-inactive {
+  position: absolute;
+  /*-webkit-transform-style: preserve-3d;
+       -moz-transform-style: preserve-3d;
+         -o-transform-style: preserve-3d;
+            transform-style: preserve-3d;*/
+  /*-webkit-transform: perspective(@num) rotateY( 85deg ) !important; 
+       -moz-transform: perspective(@num) rotateY( 85deg ) !important;
+       	 -o-transform: perspective(@num) rotateY( 85deg ) !important;
+       	 	transform: perspective(@num) rotateY( 85deg ) !important;
+*/
+  /* -webkit-transform: translateZ( @num ) !important; 
+       -moz-transform: translateZ( @num ) !important;
+       	 -o-transform: translateZ( @num ) !important;
+       	 	transform: translateZ( @num ) !important;*/
+  -webkit-transform: scale(0.1, 0.1);
+  -moz-transform: scale(0.1, 0.1);
+  -o-transform: scale(0.1, 0.1);
+  transform: scale(0.1, 0.1);
+  z-index: 1;
+  top: -250px;
+}
+.dbsapp-page-inactive:after {
+  content: " ";
+  z-index: 10;
+  display: block;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(65, 68, 67, 0.2);
+}
+.dbsapp-page-inactive:hover {
+  box-shadow: white 5px 5px 20px;
+}
+.dbsapp-page-inactive:nth-of-type(1) {
+  left: 0px;
+}
+.dbsapp-page-inactive:nth-of-type(2) {
+  left: 100px;
+}
+.dbsapp-page-inactive:nth-of-type(3) {
+  left: 200px;
+}
+.dbsapp-page-inactive:nth-of-type(4) {
+  left: 300px;
+}
+.dbsapp-page-inactive .dbsapp-row {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+/**
+ * variables
+ */
+.dbsapp-chart-editor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 400px;
+  background-color: rgba(65, 68, 67, 0.9);
+  padding: 20px 20px 0 0;
+  color: #f1f7f8;
+}
+.dbsapp-chart-editor input,
+.dbsapp-chart-editor select,
+.dbsapp-chart-editor textarea {
+  color: Black;
+}
+.dbsapp-chart-editor-replace {
+  position: absolute;
+  top: 0;
+  left: 400px;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+}
+/**
+ * variables
+ */
+/**
+ * mixins
+ */
+html,
+body {
+  height: 100%;
+  background-color: #1f1915;
+  color: #414443;
+  font-family: Verdana;
+}
+#dbsapp-nav {
+  width: 80%;
+  height: 40px;
+  color: #f1f7f8;
+  margin: 10px auto;
+  padding: 0 30px;
+  font-weight: lighter;
+}
+#dbsapp-nav .dbsapp-menuitem {
+  padding-left: 10px;
+}
+#dbsapp-main-view {
+  width: 80%;
+  height: 80%;
+  margin: 30px auto;
+}
+.dbsapp-page-active {
+  z-index: 200;
+}
+.dbsapp-page-active .dbsapp-row {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.dbsapp-row {
+  padding: 10px;
+  min-height: 200px;
+}
+.dbsapp-row:nth-of-type(1) {
+  min-height: 400px;
+}
+.dbsapp-cell {
+  height: 100%;
+  background-color: transparent;
+  padding: 0 5px;
+}
+.dbsapp-cell .dbsapp-chart-settings {
+  background-color: rgba(255, 255, 255, 0.05);
+  margin: auto;
+  height: 100%;
+  min-height: 200px;
+}
+.dbsapp-chart-settings > span.fa {
+  color: #f1f7f8;
+  padding: 5px;
+  font-size: 18px;
+  position: absolute;
+  top: 0px;
+}
+.dbsapp-chart-settings > span.fa:hover {
+  color: #3a92c9;
+  cursor: pointer;
+}
+.dbsapp-dropdown {
+  cursor: pointer;
+}
+.dbsapp-dropdown-menu {
+  position: absolute;
+  top: 20px;
+  width: 200px;
+  background-color: rgba(65, 68, 67, 0.9);
+  padding: 5px 0 5px 10px;
+}
+.dbsapp-dropdown-menu li {
+  list-style: none;
+  padding: 2px;
+}
+.dbsapp-dropdown-menu li [role="menuitem"] {
+  color: #f1f7f8;
+  text-decoration: none;
+  cursor: pointer;
+}
+.dbsapp-dropdown-menu li [role="menuitem"]:hover {
+  color: White;
+}

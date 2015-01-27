@@ -1,0 +1,48 @@
+<section>
+	<section class="dbsapp-chart-editor-replace" ng-click="dismiss()">
+	</section>
+
+	<section class="dbsapp-chart-editor">
+		<form class="form-horizontal" role="form" name="editorForm">
+			<div class="form-group">
+				<div class="col-md-4 control-label">title</div>
+				<div class="col-md-8">
+					<textarea ng-model="edited.conf.title" class="form-control input-sm" type="text" placeholder="chart title">
+						
+					</textarea> 
+				</div>
+			</div>	
+			<div class="form-group">
+				<div class="col-md-4 control-label">type</div>
+				<div class="col-md-8">
+					<select ng-model="edited.conf.type" class="form-control input-sm" ng-options="value for value in types">
+						
+					</select>
+				</div>
+			</div>	
+			<div class="form-group">
+				<div class="col-md-4 control-label">width</div>
+				<div class="col-md-8">
+					<input ng-model="edited.conf.width" class="form-control input-sm" type="number" placeholder="chart width">
+				</div>
+			</div>	
+			<div class="form-group">
+				<div class="col-md-4 control-label">height</div>
+				<div class="col-md-8">
+					<input ng-model="edited.conf.height" class="form-control input-sm" type="number" placeholder="chart height">
+				</div>
+			</div>
+			<div class="form-group" ng-include="'partials/dbsapp.editor.' + template + '.html'">
+				
+			</div>
+			<div class="form-group">
+				<div class="col-md-offset-4 col-md-8">
+					<button type="submit" class="btn btn-default" ng-disabled="editorForm.$pristine">Save</button>
+					<button type="submit" class="btn btn-warning" >Cancel</button>
+					<button type="submit" class="btn btn-danger" >Remove</button>
+				</div>
+			</div>
+		</form>
+		
+	</section>
+</section>

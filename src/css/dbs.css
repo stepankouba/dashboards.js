@@ -1,0 +1,175 @@
+.dbs-chart {
+  margin: 20px 10px 10px 10px;
+}
+svg {
+  display: block;
+  background-color: transparent;
+  margin: auto;
+}
+.dbs-chart-arcone-axis {
+  fill: grey;
+}
+.dbs-chart-arcone-value-green {
+  fill: #3a92c9;
+}
+.dbs-chart-arcone-value-orange {
+  fill: #ed8f28;
+}
+.dbs-chart-arcone-value-red {
+  fill: #e23932;
+}
+.dbs-chart-bar {
+  transform-origin: left bottom;
+}
+.dbs-chart-bar-value {
+  fill: #3a92c9;
+}
+.dbs-chart-gauge {
+  margin: auto;
+  padding: 0;
+}
+.dbs-chart-gauge-needle-center,
+.dbs-chart-gauge-needle {
+  fill: #c7c7c7;
+  stroke: #c7c7c7;
+}
+.dbs-chart-gauge-title {
+  text-anchor: middle;
+  font-size: 12px;
+  color: #a6a6a6;
+  fill: #a6a6a6;
+}
+.dbs-chart-gauge-green {
+  fill: #3a92c9;
+}
+.dbs-chart-gauge-orange {
+  fill: #ed8f28;
+}
+.dbs-chart-gauge-red {
+  fill: #e23932;
+}
+.dbs-chart-line-value {
+  fill: none;
+  stroke: black;
+}
+.dbs-chart-number-value {
+  font-size: 48px;
+  color: #a6a6a6;
+  display: block;
+  height: 70%;
+  padding: 10px 0 0 0;
+  text-align: center;
+}
+.dbs-chart-number-title {
+  font-size: 12px;
+  color: #a6a6a6;
+  fill: #a6a6a6;
+  display: block;
+  height: 20%;
+  text-align: center;
+}
+.dbs-chart-pie-title {
+  text-anchor: middle;
+  font-size: 12px;
+  color: #a6a6a6;
+  fill: #a6a6a6;
+}
+.dbs-chart-pie-fill-one {
+  fill: #3a92c9;
+}
+.dbs-chart-pie-fill-two {
+  fill: #ed8f28;
+}
+.dbs-chart-pie-fill-three {
+  fill: #2ca02c;
+}
+.dbs-chart-pie-fill-four {
+  fill: #e23932;
+}
+.dbs-chart-pie-fill-five {
+  fill: #9467bd;
+}
+.dbs-chart-pie-fill-six {
+  fill: #8c564b;
+}
+.dbs-chart-pie-fill-seven {
+  fill: #e377c2;
+}
+.dbs-chart-pie-fill-eight {
+  fill: #7f7f7f;
+}
+.dbs-chart-pie-fill-nine {
+  fill: #bcbd22;
+}
+.dbs-chart-pie-fill-ten {
+  fill: #17becf;
+}
+.dbs-chart-semaphore-green {
+  fill: #3a92c9;
+}
+.dbs-chart-semaphore-orange {
+  fill: #ed8f28;
+}
+.dbs-chart-semaphore-red {
+  fill: #e23932;
+}
+.dbs-chart-stackedbar {
+  transform-origin: left bottom;
+}
+.dbs-chart-stackedbar-axis {
+  font-size: 12px;
+  color: #a6a6a6;
+  fill: #a6a6a6;
+  cursor: pointer;
+}
+.dbs-chart-stackedbar-axis path {
+  margin-top: 5px;
+  fill: none;
+  stroke: #777;
+  shape-rendering: crispEdges;
+}
+.dbs-chart-stackedbar-group-label {
+  font-size: 12px;
+  color: #a6a6a6;
+  fill: #a6a6a6;
+}
+.dbs-chart-stackedbar-title {
+  font-size: 12px;
+  color: #a6a6a6;
+  fill: #a6a6a6;
+}
+.dbs-chart-stackedbar-legend {
+  font-size: 12px;
+  color: #a6a6a6;
+  fill: #a6a6a6;
+}
+.dbs-chart-stackedbar-fill-one {
+  fill: #3a92c9;
+}
+.dbs-chart-stackedbar-fill-two {
+  fill: #ed8f28;
+}
+.dbs-chart-stackedbar-fill-three {
+  fill: #2ca02c;
+}
+.dbs-chart-stackedbar-fill-four {
+  fill: #e23932;
+}
+.dbs-chart-stackedbar-fill-five {
+  fill: #9467bd;
+}
+.dbs-chart-stackedbar-fill-six {
+  fill: #8c564b;
+}
+.dbs-chart-stackedbar-fill-seven {
+  fill: #e377c2;
+}
+.dbs-chart-stackedbar-fill-eight {
+  fill: #7f7f7f;
+}
+.dbs-chart-stackedbar-fill-nine {
+  fill: #bcbd22;
+}
+.dbs-chart-stackedbar-fill-ten {
+  fill: #17becf;
+}

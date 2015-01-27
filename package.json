@@ -1,0 +1,36 @@
+{
+  "name": "dashboards",
+  "version": "0.0.0",
+  "description": "dashboards.js (aka DBS.js)",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "concat": "^1.0.0",
+    "jshint": "^2.5.11",
+    "watch": "^0.13.0"
+  },
+  "devDependencies": {
+    "express": "^4.11.1",
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-copy": "^0.7.0",
+    "grunt-contrib-jasmine": "^0.8.1",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-less": "^1.0.0",
+    "grunt-contrib-uglify": "^0.7.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-processhtml": "^0.3.3",
+    "jshint": "^2.5.11",
+    "mysql": "^2.5.4",
+    "underscore": "^1.7.0",
+    "watch": "^0.13.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Stepan Kouba",
+  "license": "MIT"
+}

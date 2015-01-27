@@ -1,0 +1,24 @@
+{
+  "name": "dashboards.js",
+  "version": "0.0.0",
+  "authors": [
+    "Štěpán Kouba <stepan.kouba@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "d3": "~3.5.2",
+    "fontawesome": "~4.2.0",
+    "angular": "~1.3.2",
+    "bootstrap": "~3.3.0",
+    "angular-route": "~1.3.2",
+    "less": "~2.0.0",
+    "angular-resource": "~1.3.10"
+  }
+}

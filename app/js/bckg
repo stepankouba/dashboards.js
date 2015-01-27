@@ -1,0 +1,63 @@
+editor
+	- open with ID
+	- get chart type
+	- 
+
+
+GET
+	- users
+	- projects
+	- status
+	- 
+
+On track this week (Dashboard #1)
+	- opened issues vs. closed issues (line chart)
+		- for version 1.0
+		- per week
+	- semi-burndown chart (line chart)
+		- start date / end date
+		- tasks with finished between
+		- get estimates
+	- completed tasks vs. open tasks (pie chart)
+		- for the week
+	- tasks left for this week (number)
+	- are we ok to finish this week semaphore (one)
+
+Time spent (Dashboard #2)
+	- how much time spent last week (stackedbar) per user
+	- who has not logged in time (indicator)
+	- 
+
+
+-----
+
+dbl click
+	- open modal - edit configuration
+	- save configuration to localstorage
+
+time spent MDs this week
+	- text value - increasing number
+	- smaller text value - previous week
+
+gauge
+	- percentage of open bugs
+		- thresholds
+
+pie chart
+	- distribution of bugs per assignee
+		- opened
+
+bar chart
+	- how much time spent on project
+		- from start
+		- for this month
+		- for last month
+
+burndown line chart
+	- based on deadline
+	- estimate
+	- vs. spent time
+
+Spent overview
+	- per week
+

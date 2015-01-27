@@ -1,0 +1,84 @@
+
+
+/**
+ * mixins
+ */
+.preserve-3d() {
+	position: absolute;
+	/*-webkit-transform-style: preserve-3d;
+       -moz-transform-style: preserve-3d;
+         -o-transform-style: preserve-3d;
+            transform-style: preserve-3d;*/
+}
+
+.perspective(@num) {
+	/*-webkit-transform: perspective(@num) rotateY( 85deg ) !important; 
+       -moz-transform: perspective(@num) rotateY( 85deg ) !important;
+       	 -o-transform: perspective(@num) rotateY( 85deg ) !important;
+       	 	transform: perspective(@num) rotateY( 85deg ) !important;
+*/
+   /* -webkit-transform: translateZ( @num ) !important; 
+       -moz-transform: translateZ( @num ) !important;
+       	 -o-transform: translateZ( @num ) !important;
+       	 	transform: translateZ( @num ) !important;*/
+    -webkit-transform: scale(0.1,0.1); 
+       -moz-transform: scale(0.1,0.1); 
+       	 -o-transform: scale(0.1,0.1); 
+       	 	transform: scale(0.1,0.1); 
+}
+
+.backface-invisible() {
+    -webkit-backface-visibility: hidden;
+       -moz-backface-visibility: hidden;
+         -o-backface-visibility: hidden;
+            backface-visibility: hidden;
+}
+
+/**
+ * variables
+ */
+
+/**
+ * classes
+ */
+.dbsapp-page-inactive {
+  .preserve-3d;
+  .perspective(220px);
+
+  z-index: 1;
+  top: -250px;
+
+  &:after {
+    content: " ";
+    z-index: 10;
+    display: block;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: @cell-bkg-color;
+  }
+
+  &:hover {
+    box-shadow: white 5px 5px 20px;
+  }
+
+  // TODO move to loop (http://lesscss.org/features/#loops-feature)
+  &:nth-of-type(1) {
+    left: 0px;
+  }
+  &:nth-of-type(2) {
+    left: 100px;
+  }
+  &:nth-of-type(3) {
+    left: 200px;
+  }
+  &:nth-of-type(4) {
+    left: 300px;
+  }
+
+  .dbsapp-row {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}

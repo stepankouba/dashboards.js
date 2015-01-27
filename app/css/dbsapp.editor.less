@@ -1,0 +1,37 @@
+@import (once) 'dbsapp.vars.less';
+
+@editor-width: 400px;
+
+.dbsapp-chart-editor {
+	position: absolute;
+	top: 0;
+	left: 0;
+
+	height: 100%;
+	width: @editor-width;
+	background-color: @editor-bkg-color;
+
+	padding: 20px 20px 0 0;
+
+	color: @menu-color;
+
+	input, select, textarea {
+		color: Black;
+	}
+}
+
+.dbsapp-chart-editor-replace {
+	position: absolute;
+	top: 0;
+	left: @editor-width;
+
+	height: 100%;
+	width: 100%;
+	background-color: transparent;
+
+	//display: none;
+}
+
+.dbsapp-visible {
+	//display: block;
+}
