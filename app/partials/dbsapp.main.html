@@ -1,9 +1,15 @@
 <div ng-controller="ViewCtrl">
+<!-- <div> -->
 	<div ng-repeat="p in grid | filter: {page: selectedPage}" ng-class="!p.visible ? 'dbsapp-page-inactive' : 'dbsapp-page-active'">
 		<div ng-repeat="r in p.gridRows" class="row dbsapp-row" droppable-area dragover-area drophandler="dropHandler" data-dbsapp-row="{{$index + 1}}">
 			<dbsapp-chart ng-repeat="c in cells | filter: {row: r.row, page: p.page} | orderBy: '+cell'" class="dbsapp-cell col-md-{{12 / r.cells}}"
-				draggable-cell dragover-area data-dbsapp-row="{{c.row}}" data-dbsapp-cell="{{c.cell}}" dbsapp-id="cell-{{c.uuid}}" data="c.data" conf="c.conf" load="true" settings-click="showEditor(c.uuid)">
+				draggable-cell dragover-area data-dbsapp-row="{{c.row}}" data-dbsapp-cell="{{c.cell}}" dbsapp-id="cell-{{c.uuid}}" response="c.response" data="c.data" conf="c.conf" load="true" settings-click="showEditor(c.uuid)">
 			</dbsapp-chart>
 		</div>
+		<!-- <div ng-repeat="r in p.gridRows" class="row dbsapp-row" droppable-area dragover-area drophandler="dropHandler" data-dbsapp-row="{{$index + 1}}">
+			<div ng-repeat="c in cells | filter: {row: r.row, page: p.page} | orderBy: '+cell'">
+				<span style="color: white;">{{c.data}}</span>
+			</div>
+		</div> -->
 	</div>
 </div>

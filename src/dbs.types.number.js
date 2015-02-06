@@ -52,7 +52,7 @@
 	
 	/** TODO comment */
 	chart._drawTitle = function() {
-		this._chart.append('span')
+		this.dbs.root.append('span')
 			.attr('class', this.getClassName('title'))
 			.text(this._title);
 	};
@@ -63,15 +63,19 @@
 			self = this;
 
 		s = this._chart.selectAll('span')
-			.data(data)
-			.enter()
+			.data(data);
+
+		s.enter()
 			.append('span')
-			.attr('class', this.getClassName('value'))
-			.text(function(d){return d.value})
+			.attr('class', this.getClassName('value'));
+		
+		s.text(function(d){
+				return d.value;
+			})
 			.transition()
 		    .delay(100)
 			.ease('in')
-			.duration(2000)
+			.duration(1500)
 			.tween('text', function(d) {
 	            var i = d3.interpolate(0, d.value),
 	                prec = d.value.toString().split('.'),
@@ -81,7 +85,6 @@
 	                this.textContent = Math.round(i(t) * round) / round;
 	            };
 	        });
-		
 	};
 
 	// add type

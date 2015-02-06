@@ -4,111 +4,15 @@
  */
 
 // Declare app level module which depends on filters, and services
-angular.module('dbsApp.controllers', []).
-controller('MainCtrl', ['$scope', '$rootScope', 'Editor', 'RestAPI',
-    function($scope, $rootScope, Editor, RestAPI) {
-        var grid = [
-                {
-                    page: 1,
-                    pageTitle: 'Effort dashboard',
-                    visible: true,
-                    gridRows: [
-                        {row: 1, cells: 1},
-                        {row: 2, cells: 3}
-                    ] 
-                },
-                {
-                    page: 2,
-                    pageTitle: 'MD dashboard',
-                    visible: true,
-                    gridRows: [
-                        {row: 1, cells: 1}
-                    ] 
-                }
-            ],
-            cells = [
-            {
-                uuid: DBS.Utils.uuid(),
-                id: 1,
-                cell: 1,
-                row: 1,
-                page: 1,
-                conf: {
-                    type: 'stackedbar',
-                    width: 600,
-                    height: 380,
-                    xProp: 'status',
-                    groupBy: 'tracker',
-                    title: 'MDs per user in this week'
-                },
-                data: [
-                    {value: 20, user: 'karel', activity: 'PM'},
-                    {value: 50, user: 'pepa', activity: 'PM'},
-                    {value: 100, user: 'honza', activity: 'PM'},
-                    {value: 40, user: 'karel', activity: 'test'},
-                    {value: 80, user: 'pepa', activity: 'test'},
-                    {value: 5, user: 'karel', activity: 'analysis'},
-                    {value: 80, user: 'pepa', activity: 'analysis'},
-                    {value: 5, user: 'honza', activity: 'analysis'},
-                    {value: 80, user: 'honza', activity: 'test'},
-                    {value: 40, user: 'karel', activity: 'Devel'},
-                    {value: 80, user: 'pepa', activity: 'Devel'},
-                    {value: 5, user: 'honza', activity: 'Devel'}
-                ],
-            },
-            {
-                uuid: DBS.Utils.uuid(),
-                id: 3,
-                cell: 1,
-                row: 2,
-                page: 1,
-                conf: {
-                    type: 'number',
-                    title: 'MDs spent in this week'
-                },
-                data: [{value: 76.8}]
-            },
-            {
-                uuid: DBS.Utils.uuid(),
-                id: 4,
-                cell: 2,
-                row: 2,
-                page: 1,
-                conf: {
-                    type: 'gauge',
-                    title: '% of open bugs / features',
-                    width: 300,
-                    height: 180,
-                    thresholds: [
-                        {className: 'green', minVal: 0, maxVal: .25},
-                        {className: 'orange', minVal: .25, maxVal: .7},
-                        {className: 'red', minVal: .7, maxVal: 1},
-                    ]
-                },
-                data: [Math.random()]
-            },
-            {
-                uuid: DBS.Utils.uuid(),
-                id: 5,
-                cell: 3,
-                row: 2,
-                page: 1,
-                conf: {
-                    type: 'pie',
-                    width: 300,
-                    height: 180,
-                    title: 'bugs distributions per assignee'
-                },
-                data: [
-                    {value: 15, text: 'Jan Jeřábek'},
-                    {value: 75, text: 'Štěpán Kouba'},
-                    {value: 5, text: 'Petr Mahdalíček'},
-                    {value: 77, text: 'Lukáš Kosina'},
-                    {value: 22, text: 'Ladislav Kaiser'}
-                ]
-            }
-        ];
+angular.module('dbsApp.controllers', [])
+.controller('MainCtrl', ['$scope', '$rootScope', '$interval', 'Editor', 'RestAPI', 'Cells', 
+    function($scope, $rootScope, $interval, Editor, RestAPI, Cells) {
+        $rootScope.countdown = COUNTER_INIT_VALUE;
+        var versAPI;
 
+        /**
+         * TODO desc
+         */
         $scope.showEditor = function(id) {
             var EditorInstance;
 
@@ -130,27 +34,79 @@ controller('MainCtrl', ['$scope', '$rootScope', 'Editor', 'RestAPI',
             $rootScope.editorVisible = !$rootScope.editorVisible;
         };
 
-        var r = RestAPI.openIssuesBy();
-        r.get(function(s){
-            var a = [];
-            s.forEach(function(v, k){
-                a.push({value: v.value, status: v.status, tracker: v.tracker});
+        /**
+         * TODO description
+         */
+        $scope.callRest = function(obj, key) {
+            /**
+             * function for updating the obj
+             */
+            function updateCells(o, k) {
+                $scope.cells[k] = o;
+
+            }
+
+            var resp = RestAPI[obj.method](obj.params);
+
+            resp.get(function(s){
+                obj.data = s;
+                obj.response = 'ok';
+                
+                updateCells(obj, key);
+            }, function(e){
+                obj.response = 'error';
+                console.log('Error:', e);
+                //updateObj(obj);
+            });
+        };
+
+        $scope.updateCharts = function(){
+            angular.forEach(Cells, function(cell, key){
+
+                // method prop defines 
+                if (cell.method && angular.isArray(cell.params)) {
+                    $scope.callRest(cell, key);
+                } else {
+                    $scope.cells[key] = cell;
+                }
+            });
+        };
+
+        // get the versions and start the queries
+        versAPI = RestAPI.getValidVersions();
+        versAPI.get(function(s){
+            // get ids of versions
+            s.forEach(function(el){
+                RestAPI.fixedInVersionIds.push(el.id);
             });
 
-            //console.log('data', cells[0].data);
-            //console.log('rest', a[0]);
+            $scope.cells = Cells;
+            $scope.updateCharts();
 
-            cells[0].data = a;
+            /**
+             *  countdown and reload
+             */
+            $interval(function(){
+                if ($rootScope.countdown === 1) {
+                    var val = Math.random() * 200;
 
-            $scope.cells = cells;
-            $scope.grid = grid;
+                    Cells[1].data = [{value: val.toFixed(1)}];
+                    $scope.cells.splice(1,1,Cells[1]);
+                        
+                    $rootScope.countdown = COUNTER_INIT_VALUE;
+                }
+                else
+                    $rootScope.countdown--;
+            }, 1000);
+
         }, function(e){
             console.log(e);
         });
-}]).
-controller('ViewCtrl', ['$scope', '$rootScope', '$log',
-    function($scope, $rootScope, $log) {
+}])
+.controller('ViewCtrl', ['$scope', '$rootScope', '$log', 'Grid',
+    function($scope, $rootScope, $log, Grid) {
 		$scope.dragged = null;
+        $scope.grid = Grid;
 
 		/** TODO comment */
 		$scope.dropHandler = function (source, target) {
@@ -171,19 +127,19 @@ controller('ViewCtrl', ['$scope', '$rootScope', '$log',
 
 
     }// controller function
-]).
-controller('MenuCtrl', ['$scope', '$rootScope', '$log',
-    function($scope, $rootScope, $log) {
+])
+.controller('MenuCtrl', ['$scope', '$rootScope', '$interval', 'Grid',
+    function($scope, $rootScope, $interval, Grid) {
         $scope.showDropdown = false;
-
+        $scope.grid = Grid;
+        
         $scope.selectPage = function(page) {
             $rootScope.selectedPage = page;
             $scope.showDropdown = false;
         }
     }
-]).
-
-controller('EditorCtrl', ['$scope', '$rootScope', '$log', 'Editor',
+])
+.controller('EditorCtrl', ['$scope', '$rootScope', '$log', 'Editor',
     function($scope, $rootScope, $log, Editor) {
         $scope.chart = {};
         $scope.template = $scope.edited.conf.type;

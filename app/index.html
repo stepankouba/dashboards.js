@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="en" ng-app="dbsApp">
 <head>
  	<meta charset="utf-8">
 	<title>dashboard example</title>
@@ -22,7 +22,7 @@
 	<link rel="stylesheet" href="./css/dbsapp.css">
 </head>
 
-<body ng-app="dbsApp" ng-controller="MainCtrl">
+<body>
 	<section id="dbsapp-nav" ng-controller="MenuCtrl">
 		<div class="pull-left">
 			<div class="dropdown">
@@ -35,6 +35,9 @@
 			  	</li>
 			  </ul>
 			</div>
+		</div>
+		<div class="pull-right">
+			<span ng-class="countdown <= 10 ? 'dbsapp-cnt-warning' : 'dbsapp-cnt-ok'">{{countdown}}</span>
 		</div>
 	</section>
 	<section id="dbsapp-main-view" ng-view>
@@ -67,10 +70,12 @@
 	<script src="../src/dbs.types.pie.js"></script>
 	<!-- /build -->
 	<!-- build:js ./js/dbsapp.min.js -->
+	<script src="./js/dbsapp.const.js"></script>
 	<script src="./js/dbsapp.js"></script>
 	<script src="./js/dbsapp.ctrls.js"></script>
 	<script src="./js/dbsapp.srvcs.js"></script>
 	<script src="./js/dbsapp.srvcs.rest.js"></script>
+	<script src="./js/dbsapp.srvcs.cells.js"></script>
 	<script src="./js/dbsapp.srvcs.local.js"></script>
 	<script src="./js/dbsapp.srvcs.editor.js"></script>
 	<script src="./js/dbsapp.drtvs.js"></script>

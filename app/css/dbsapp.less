@@ -77,13 +77,34 @@ html, body {
 	}
 }
 
-.dbsapp-chart-settings > span.fa {
+.dbsapp-hidden {
+	display: none;
+}
+
+div.dbsapp-visible {
+	display: block;
+}
+
+span.dbsapp-visible {
+	display: inline;
+}
+
+
+.dbsapp-chart-settings span.fa {
 	color: @menu-color;
 	padding: 5px;
 	font-size: 18px;
 
 	position: absolute;
 	top: 0px;
+	
+	&.fa-cog {
+		left: 5px;
+	}
+
+	&.fa-spin {
+		right: 5px;
+	}
 
 	&:hover {
 		color: @blue;
@@ -91,18 +112,27 @@ html, body {
 	}
 }
 
+.dbsapp-cnt-ok {
+	color: @green;
+}
+
+.dbsapp-cnt-warning {
+	color: @red;
+}
+
 .dbsapp-dropdown {
 	cursor: pointer;
+	font-size: 16px;
 }
 
 .dbsapp-dropdown-menu {
 	position: absolute;
 	top: 20px;
-	width: 200px;
+	min-width: 200px; 
 
 
 	background-color: @editor-bkg-color;
-	padding: 5px 0 5px 10px;
+	padding: 5px 5px 5px 10px;
 
 
 	li {

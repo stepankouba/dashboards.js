@@ -16,6 +16,7 @@ var express = require('express'),
 //server.set('views', '../app');
 //console.log('dirname',__dirname + '/../app');
 server.use('/app', express.static(__dirname + '/app'));
+server.use('/src', express.static(__dirname + '/src'));
 server.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 server.use('/', function(req, res, next) {

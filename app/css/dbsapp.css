@@ -137,26 +137,48 @@ body {
   height: 100%;
   min-height: 200px;
 }
-.dbsapp-chart-settings > span.fa {
+.dbsapp-hidden {
+  display: none;
+}
+div.dbsapp-visible {
+  display: block;
+}
+span.dbsapp-visible {
+  display: inline;
+}
+.dbsapp-chart-settings span.fa {
   color: #f1f7f8;
   padding: 5px;
   font-size: 18px;
   position: absolute;
   top: 0px;
 }
-.dbsapp-chart-settings > span.fa:hover {
+.dbsapp-chart-settings span.fa.fa-cog {
+  left: 5px;
+}
+.dbsapp-chart-settings span.fa.fa-spin {
+  right: 5px;
+}
+.dbsapp-chart-settings span.fa:hover {
   color: #3a92c9;
   cursor: pointer;
 }
+.dbsapp-cnt-ok {
+  color: #3c831a;
+}
+.dbsapp-cnt-warning {
+  color: #e23932;
+}
 .dbsapp-dropdown {
   cursor: pointer;
+  font-size: 16px;
 }
 .dbsapp-dropdown-menu {
   position: absolute;
   top: 20px;
-  width: 200px;
+  min-width: 200px;
   background-color: rgba(65, 68, 67, 0.9);
-  padding: 5px 0 5px 10px;
+  padding: 5px 5px 5px 10px;
 }
 .dbsapp-dropdown-menu li {
   list-style: none;

@@ -80,7 +80,8 @@
 		this._drawAxis();
 		
 		// draw the chart
-		this._draw(this.data);
+		if (this.data.length > 0)
+			this._draw(this.data);
 
 		// draw title
 		this._drawTitle();
@@ -124,6 +125,16 @@
 		    .range(this._colors);
 	};
 
+	/** TODO  general update method*/
+	chart.update = function(data) {
+		this.data = data;
+
+		if (this.data.length > 0) {
+			this._draw(this.data);
+			this._drawLegend();
+		}
+	},
+
 	/** TODO */
 	chart._draw = function(values) {
 		var self = this,
@@ -133,7 +144,8 @@
 			y0 = this._y0,
 			y1 = this._y1,
 			x = this._x,
-			color = this._color;
+			color = this._color,
+			r;
 
 		dataByGroup = this._nest.entries(values);
 
@@ -153,26 +165,30 @@
 		    ;
 
 		// create rectangles per data
-		group.selectAll('rect')
+		r = group.selectAll('rect')
 		    .data(function(d) { return d.values; })
-		    .enter().append('rect')
-		    .attr('x', function(d) { return x(d[xProp]); })
+		    .enter().append('rect');
+
+		r.attr('x', function(d) { return x(d[xProp]); })
 		    .attr('y', function(d) { return y1(d.value + d.valueOffset); })
 		    .attr('class', function(d){ return color(d[groupBy]);})
 		    .attr('width', x.rangeBand())
-		    .attr('height', function(d) { return y0.rangeBand() - y1(d.value); })
-		    ;
+		    .attr('height', function(d) { return y0.rangeBand() - y1(d.value); });
+
+		if (this._onclick) {
+			r.on('click', function(d){
+				window.open(self._onclick(d, self.params), '_blank');
+			});
+		}
 
 		// append text group labels
-		// TODO proper display of text labels
 		/*group.append('text')
-		    .attr('class', this.getClassName('group-label'))
-		    .attr('x', -6)
-		    .attr('y', function(d) { return y1(d.values[0].value) / 2; })
-		    .attr('dy', '.35em')
-		    .text(function(d) { return d.key; });*/
+		      .attr('class', this.getClassName('group-label'))
+		      .attr('x', -6)
+		      .attr('y', function(d) { return y1(d.values[0].value / 2); })
+		      .attr('dy', '.35em')
+		      .text(function(d) { return 'pokus'; });*/
 
-		
 
 		group.filter(function(d, i) { return !i; })
 			.append('g')
@@ -215,7 +231,9 @@
 		var color = this._color,
 			groupBy = this._groupBy;
 
-		var legend = this._chart.selectAll('.legend')
+		console.log(color.domain());
+
+		var legend = this._chart.selectAll(this.byClassName('legend'))
 		    .data(color.domain().slice().reverse())
 		    .enter().append('g')
 		    .attr('class', this.getClassName('legend'))

@@ -1,6 +1,11 @@
 -- open issues by tracker
 select t.name as tracker, is1.name as status,
-	(select count(i.id) from issues i where i.project_id in (1, 3) and i.status_id = is1.id and i.tracker_id = t.id) as value
+	(select count(i.id)
+		from issues i
+        inner join versions as v on i.fixed_version_id = v.id
+        where ((i.project_id = 2 and v.name = "1.0.2") or
+			(i.project_id = 3 and v.name = "1.0.2")) and
+            i.status_id = is1.id and i.tracker_id = t.id) as value
 	from trackers t, issue_statuses is1
     where
         is1.is_closed = 0;
@@ -18,14 +23,14 @@ select t.name, is1.name, count(i.id)
 
 
 -- open issues split by owner
-select u.login, is1.name, count(i.id)
+select u.login, count(i.id)
 	from issues i
     inner join issue_statuses is1 on i.status_id = is1.id
     inner join users u on i.assigned_to_id = u.id
     where
-		i.project_id in (1, 3) and
-        is1.is_closed = 0		
-    group by u.login, is1.name;
+		i.project_id in (1, 2) and
+        is1.is_closed = 0 
+    group by u.login;
 
 
 
@@ -47,6 +52,12 @@ SELECT t.spent_on, u.login, sum(t.hours) / 8 as MDs
 	where t.project_id in (1, 2, 3) and
 		t.spent_on > date_sub(curdate(), INTERVAL 6 day)
     group by t.spent_on, t.user_id;
+
+-- time logged this week
+SELECT SUM(t.hours) / 8 as value
+	FROM time_entries as t
+	where t.project_id in (2, 3) and
+		yearweek(t.spent_on, 1) = yearweek(curdate(), 1);
 
 
 -- open vs. closed for a version

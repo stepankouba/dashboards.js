@@ -121,10 +121,10 @@ module.exports = function(grunt) {
                 files: '<%= jshint.lib.src %>',
                 tasks: ['jasmine:lib']
             },
-            app_test: {
+            /*app_test: {
                 files: '<%= jshint.app.src %>',
                 tasks: ['jasmine:app']
-            },
+            },*/
             development_less: {
                 files: ['src/css/*.less', 'app/css/*.less'],
                 tasks: ['less:development']  

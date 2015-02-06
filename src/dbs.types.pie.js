@@ -60,7 +60,10 @@
 		    .attr('class', this.initClassName())
 		    .attr('transform', 'translate('+ this.dbs._width / 2 +', ' + (this.dbs._height / 3 + 10) + ')');
 
-		this._draw(this.data);
+		if (this.data.length > 0)
+			this._draw(this.data);
+
+		this._drawTooltip();
 
 		this._drawTitle();
 	};
@@ -68,15 +71,19 @@
 	/** TODO */
 	chart._draw = function(data) {
 		// arc function
-		var pie, v, arc, color;
+		var pie, v, arc, arcHover, color,
+			self = this;
 
 		color = d3.scale.ordinal()
 		    .range(this._colors);
 
-
 		arc = d3.svg.arc()
 		    .innerRadius(this._radius - 40)
 		    .outerRadius(this._radius - 15);			    
+
+		arcHover = d3.svg.arc()
+		    .innerRadius(this._radius - 40)
+		    .outerRadius(this._radius - 10);
 
 		pie = d3.layout.pie()
 			.padAngle(.03) // specify pie padding
@@ -88,15 +95,48 @@
 		    .enter().append('g')
 		    .attr('class', this.getClassName('arc'));
 
+		// mouse events
 		v.append('path')
 		    .attr('d', arc)
-		    .attr('class', function(d) { return color(d.data.value); });
+		    .attr('class', function(d) { return color(d.data.text); })
+		    .on('mouseover', function(d) {
+		    	var m;
+		        var el = d3.select(this)     
+		        	.transition()
+		        	.duration(200)
+		        	.attr('d', arcHover);
 
-		  /*g.append("text")
-		      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-		      .attr("dy", ".35em")
-		      .style("text-anchor", "middle")
-		      .text(function(d) { return d.data.age; });*/
+		        self._tooltip
+		        	.transition()
+		        	.duration(200)
+		        	.style('opacity', 0.9);
+
+		        self._tooltip
+		        	.html(d.data.text + ' (' + d.value + ' issues)')
+		        	.style('left', (d3.event.pageX) + 'px')			 
+					.style('top', (d3.event.pageY - 28) + 'px');
+
+		    })
+		    .on('mouseout', function(d) {
+		    	var el = d3.select(this)
+		        	.transition()
+		        	.duration(200)
+		        	.attr('d', arc);
+
+		        self._tooltip
+		        	.style('opacity', 0);
+		        
+		        self._tooltip
+		        	.style('left','-999px')			 
+					.style('top', '-999px');
+
+		    });
+		
+		if (this._onclick) {
+			v.on('click', function(d){
+				window.open(self._onclick(d, self.params), '_blank');
+			});
+		}
 
 	};
 
@@ -108,6 +148,13 @@
 			.text(this._title)
 			.attr('y', this.dbs._height - 20)
 			.attr('x', this.dbs._width / 2);
+	};
+
+	chart._drawTooltip = function() {
+		this._tooltip = d3.select('body')
+			.append('span')
+			.attr('class', this.getClassName('tooltip'))
+			.style('opacity', 0);
 	}
 
 	// add type

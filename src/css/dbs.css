@@ -74,6 +74,19 @@ svg {
   color: #a6a6a6;
   fill: #a6a6a6;
 }
+.dbs-chart-pie-tooltip {
+  display: inline-block;
+  font-size: 12px;
+  background-color: #c7c7c7;
+  border-radius: 4px;
+  position: absolute;
+  min-width: 60px;
+  min-height: 28px;
+  padding: 4px;
+}
+.dbs-chart-pie-tooltip span {
+  color: #2e2b2a;
+}
 .dbs-chart-pie-fill-one {
   fill: #3a92c9;
 }
@@ -127,6 +140,10 @@ svg {
   fill: none;
   stroke: #777;
   shape-rendering: crispEdges;
+}
+.dbs-chart-stackedbar-group > rect:hover {
+  cursor: pointer;
+  opacity: 0.5;
 }
 .dbs-chart-stackedbar-group-label {
   font-size: 12px;

@@ -8,17 +8,19 @@ angular.module('dbsApp', [
     'ngRoute',
     'dbsApp.services', // services
     'dbsApp.services.rest',
+    'dbsApp.services.cells',
     'dbsApp.services.local',
     'dbsApp.services.editor',
     'dbsApp.controllers', // controlers
     'dbsApp.directives', 
     'dbsApp.directives.chart'
-]).
-config(['$routeProvider', function($routeProvider) {
+])
+.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/dashboard', {templateUrl: 'partials/dbsapp.main.html', controller: 'MainCtrl'});
     $routeProvider.otherwise({redirectTo: '/dashboard'});
 }])
-.run(['$rootScope', function($rootScope){
+.run(['$rootScope', 'RestAPI', function($rootScope, RestAPI){
+
     // setting rootScope variables in the name of simplicity (might use Services instead in future)
 	$rootScope.editorVisible = false;
     $rootScope.selectedPage = 1;

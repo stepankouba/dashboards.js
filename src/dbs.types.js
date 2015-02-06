@@ -44,8 +44,11 @@ DBS.Charts = DBS.Charts || {};
 		},
 
 		/** TODO  general update method*/
-		update: function() {
-			this._draw(this.data);
+		update: function(data) {
+			this.data = data;
+
+			if (this.data.length > 0)
+				this._draw(this.data);
 		},
 
 		/** TODO  comment */
@@ -76,7 +79,18 @@ DBS.Charts = DBS.Charts || {};
 		/** TODO  comment */
 		set h(val) {
 			this._h = val;
-		}
+		},
+
+		/** TODO comment */		
+		get params() {
+			return this._params;
+		},
+
+		/** TODO comment */		
+		set params(val) {
+			this._params = val;
+		},		
+
 	};
 
 	/** TODO comment */

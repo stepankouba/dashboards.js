@@ -44,14 +44,14 @@
 					.attr('r', this.radius);
 
 				el.append('path')
-					.attr('d', this.drawPointer(0))
+					.attr('d', this._drawPointer(0))
 					.attr('class', chart.getClassName('needle'))
 					.attr('transform', 'rotate(90)');
 			} else {
-				this.animatePointer(el, value);
+				this._animatePointer(el, value);
 			}
 		},
-		drawPointer: function(perc) {
+		_drawPointer: function(perc) {
 			// code inspired by: http://codepen.io/jaketrent/pen/eloGk
 			var centerX, centerY, leftX, leftY, rightX, rightY, thetaRad, topX, topY;
 			thetaRad = perc * Math.PI;
@@ -65,7 +65,7 @@
 			rightY = centerY - this.radius * Math.sin(thetaRad + Math.PI / 2);
 			return "M " + leftX + " " + leftY + " L " + topX + " " + topY + " L " + rightX + " " + rightY;
 		},
-		animatePointer: function(el, perc) {
+		_animatePointer: function(el, perc) {
 			// code inspired by: http://codepen.io/jaketrent/pen/eloGk
 			var self = this,
 				tempD3 = d3;
@@ -80,7 +80,7 @@
 						var progress;
 
 						progress = percentOfPercent * perc;
-						return tempD3.select(this).attr('d', self.drawPointer(progress));
+						return tempD3.select(this).attr('d', self._drawPointer(progress));
 				};
 			});
 		}
@@ -88,7 +88,7 @@
 		
 	/** TODO comment */
 	chart.init = function(conf) {
-		this.data = conf.data;
+		this.data = conf.data[0].value;
 		this.w = conf.width || 200;
 		this.h = conf.height || 150;
 		this._title = conf.title;
@@ -129,8 +129,10 @@
 	};
 
 	/** TODO comment custom update method */
-	chart.update = function() {
-		this._drawNeedle(this.data)
+	chart.update = function(data) {
+		this.data = data[0].value;
+
+		this._drawNeedle(this.data);
 	};
 
 	/** TODO comment */
