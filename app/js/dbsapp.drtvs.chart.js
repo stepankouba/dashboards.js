@@ -29,7 +29,7 @@ angular.module('dbsApp.directives.chart', ['dbsApp.directives'])
 		link: function($scope, elem, attr) {
 			elem.attr('id', 'container-for-' + $scope.dbsappId);
 			elem.find('div').attr('id', $scope.dbsappId);
-			
+
 			var w = $scope.conf.width,
 				h = $scope.conf.height;
 
@@ -65,11 +65,9 @@ angular.module('dbsApp.directives.chart', ['dbsApp.directives'])
 		},
 		// TODO comment
 		controller: function($scope) {
-			//if ($scope.conf.type === 'gauge' || $scope.conf.type === 'number') {
-				$scope.$watch('data', function(){
-					$scope.chart.update($scope.data);
-				});	
-			//}
+			$scope.$watch('data', function(){
+				$scope.chart.update($scope.data);
+			});			
 		}
 	}
 }]);
