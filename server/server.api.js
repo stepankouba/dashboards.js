@@ -16,11 +16,11 @@ var mysql = require('mysql'),
 
 api = {
     validVersions: function(req, res, next) {
-        var projects = req.params.projects;
+        var project = req.params.project;
 
-        projects = projects.split(',');
+        project = project.split(',');
 
-        if (projects.length !== 2)
+        if (project.length === 0)
             throw new Error('openIssuesByTracker: wrong length of parameters.');
 
         pool.getConnection(function(err, c){
@@ -29,10 +29,10 @@ api = {
                 res.sendStatus(500);
             } else {
                 c.query('select * from versions \
-                    where project_id in (?, ?) and \
+                    where project_id = ? and \
                         status = \'open\' and \
                         date_format(effective_date, \'%Y-%m\')=date_format(now(), \'%Y-%m\');',
-                    [projects[0], projects[1]], 
+                    [project], 
                     function (err, rows, fields){
                         if (err) {
                             console.log(err);
@@ -54,7 +54,7 @@ api = {
         // get parms
         var versions = req.params.versions.split(',');
 
-        if (versions.length !== 2)
+        if (versions.length === 0)
             throw new Error('openIssuesByTracker: wrong length of parameters.');
         
         // connect db
@@ -94,7 +94,7 @@ api = {
         // get parms
         var versions = req.params.versions.split(',');
 
-        if (versions.length !== 2)
+        if (versions.length === 0)
             throw new Error('openIssuesByTracker: wrong length of parameters.');
 
         // connect db
@@ -112,7 +112,6 @@ api = {
                                 (v.id in (?)) and \
                                 is1.is_closed = 0 \
                             group by u.login;',
-
                     [versions], 
                     function (err, rows, fields){
                         if (err) {
@@ -126,6 +125,39 @@ api = {
                         // return connection back to the pool
                         c.release();
                     }
+                );
+            }
+        });
+    },
+    openIssuesWithSeverity: function(req, res, next){
+        var severity = req.params.severity.split(','),
+            versions = req.params.versions.split(',');
+
+        pool.getConnection(function(err, c){
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+            } else {
+                c.query('select count(i.id) as value \
+                        from issues i \
+                        left outer join issue_statuses s on i.status_id = s.id \
+                        where priority_id in (?) \
+                            and fixed_version_id in (?) \
+                            and s.is_closed = 0;',
+                        [severity, versions],
+                        function(err, rows, fields){
+                            if (err) {
+                                console.log(err);
+                                res.sendStatus(500);
+                            } else {
+                                console.log(rows);
+                                res.type('application/json');
+                                res.send(rows);
+                            }
+
+                            // return connection back to the pool
+                            c.release();
+                        }
                 );
             }
         });

@@ -10,31 +10,35 @@ factory('RestAPI', ['$rootScope', '$resource', function($rootScope, $resource){
 		server: 'localhost',
 		port: '8080',
 		apiVersion: '0.1.0',
-		/**
-		 * in which version to look
-		 */
-		fixedInVersionIds: [],
-		/**
-		 * in which projects
-		 */
-		projects: [1, 3],
+		
 		get url() {
 			return 'http://' + this.server + ':' + this.port + '/api/' + this.apiVersion;
 		},
-		getValidVersions: function() {
+		getValidVersions: function(project) {
 			return $resource(
-					this.url + '/dashboard/versions/valid/' + this.projects.join(),
+					this.url + '/dashboard/versions/valid/' + project,
 					{},
 					{'get': {method: 'GET', isArray: true}});
 		},
 		
-		openIssuesBy: function(by) {
+		openIssuesBy: function(by, fixedInVersionIds) {
 
 			if (!by)
 				throw new Error('RestAPI.openIssuesBy: parameter not specified');
 
 			return $resource(
-					this.url + '/dashboard/open-issues/by/' + by + '/' + this.fixedInVersionIds.join(),
+					this.url + '/dashboard/issues/open/' + by + '/' + fixedInVersionIds.join(),
+					{},
+					{'get': {method: 'GET', isArray: true}});
+		},
+
+		openIssuesWithSeverity: function(severity, fixedInVersionIds) {
+
+			if (!severity)
+				throw new Error('RestAPI.openIssuesWithSeverity: parameter not specified');
+
+			return $resource(
+					this.url + '/dashboard/issues/open/severity/' + severity.join() + '/' + fixedInVersionIds.join(),
 					{},
 					{'get': {method: 'GET', isArray: true}});
 		}

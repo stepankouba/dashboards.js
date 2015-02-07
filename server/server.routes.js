@@ -10,19 +10,24 @@ var _ = require('underscore');
  
 var routes = [
     {
-        path: '/api/' + conf.apiVersion + '/dashboard/versions/valid/:projects',
+        path: '/api/' + conf.apiVersion + '/dashboard/versions/valid/:project',
         httpMethod: 'GET',
         middleware: [api.validVersions]
     },
     {
-        path: '/api/' + conf.apiVersion + '/dashboard/open-issues/by/tracker/:versions',
+        path: '/api/' + conf.apiVersion + '/dashboard/issues/open/tracker/:versions',
         httpMethod: 'GET',
         middleware: [api.openIssuesByTracker]
     },
     {
-        path: '/api/' + conf.apiVersion + '/dashboard/open-issues/by/assignee/:versions',
+        path: '/api/' + conf.apiVersion + '/dashboard/issues/open/assignee/:versions',
         httpMethod: 'GET',
         middleware: [api.openIssuesByAssignee]
+    },
+    {
+        path: '/api/' + conf.apiVersion + '/dashboard/issues/open/severity/:severity/:versions',
+        httpMethod: 'GET',
+        middleware: [api.openIssuesWithSeverity]
     },
     // All other get requests should be handled by AngularJS's client-side routing system
     {
