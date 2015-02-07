@@ -129,9 +129,15 @@
 	chart.update = function(data) {
 		this.data = data;
 
-		if (this.data.length > 0) {
+		if (this._group === undefined && this.data.length > 0) {
 			this._draw(this.data);
 			this._drawLegend();
+		} else if (this.data.length > 0) {
+			this._chart.selectAll(this.byClassName('group')).remove();
+			this._draw(this.data);
+			// set default values
+			this._group = undefined;
+			this._stacked = true;
 		}
 	},
 
@@ -157,7 +163,7 @@
 			.range([y0.rangeBand(), 0]);
 
 		// create g tags per groups
-		group = this._chart.selectAll(this.getClassName('group'))
+		group = this._chart.selectAll(this.byClassName('group'))
 		    .data(dataByGroup)
 		    .enter().append('g')
 		    .attr('class', this.getClassName('group'))
@@ -214,6 +220,8 @@
 		    		g.selectAll('rect').attr('y', function(d) { return y1(d.value + d.valueOffset); });
 		    	}	
 			});
+
+		this._group = group;
 	};
 
 	/** TODO */
