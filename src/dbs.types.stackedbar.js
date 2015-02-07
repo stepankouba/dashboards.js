@@ -256,7 +256,6 @@
 		    .attr('x', this.w - 24)
 		    .attr('y', 29)
 		    .attr('dy', '.35em')
-		    .style('text-anchor', 'end')
 		    .text(function(d) { return d; });
 	};
 
