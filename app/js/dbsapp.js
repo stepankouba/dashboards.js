@@ -16,12 +16,12 @@ angular.module('dbsApp', [
     'dbsApp.directives.chart'
 ])
 .config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/dashboard', {templateUrl: 'partials/dbsapp.main.html', controller: 'MainCtrl'});
-    $routeProvider.otherwise({redirectTo: '/dashboard'});
+    $routeProvider.when('/dashboard/:pageId', {templateUrl: 'partials/dbsapp.main.html', controller: 'MainCtrl'});
+    $routeProvider.otherwise({redirectTo: '/dashboard/0'});
 }])
 .run(['$rootScope', 'RestAPI', function($rootScope, RestAPI){
 
     // setting rootScope variables in the name of simplicity (might use Services instead in future)
 	$rootScope.editorVisible = false;
-    $rootScope.selectedPage = 1;
+    //$rootScope.selectedPage = 0;
 }]);

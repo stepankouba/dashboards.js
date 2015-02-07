@@ -5,10 +5,11 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('dbsApp.controllers', [])
-.controller('MainCtrl', ['$scope', '$rootScope', '$interval', 'Editor', 'RestAPI', 'Cells', 
-    function($scope, $rootScope, $interval, Editor, RestAPI, Cells) {
+.controller('MainCtrl', ['$scope', '$rootScope', '$interval', '$routeParams','Editor', 'RestAPI', 'Cells', 'Grid',
+    function($scope, $rootScope, $interval, $routeParams, Editor, RestAPI, Cells, Grid) {
         $rootScope.countdown = COUNTER_INIT_VALUE;
-        var versAPI;
+        $rootScope.selectedPage = parseInt($routeParams.pageId);
+        var versAPI, reload;
 
         /**
          * TODO desc
@@ -34,79 +35,41 @@ angular.module('dbsApp.controllers', [])
             $rootScope.editorVisible = !$rootScope.editorVisible;
         };
 
-        /**
-         * TODO description
-         */
-        $scope.callRest = function(obj, key) {
-            /**
-             * function for updating the obj
-             */
-            function updateCells(o, k) {
-                $scope.cells[k] = o;
 
-            }
-
-            var resp = RestAPI[obj.method](obj.params);
-
-            resp.get(function(s){
-                obj.data = s;
-                obj.response = 'ok';
-                
-                updateCells(obj, key);
-            }, function(e){
-                obj.response = 'error';
-                console.log('Error:', e);
-                //updateObj(obj);
-            });
-        };
-
-        $scope.updateCharts = function(){
-            angular.forEach(Cells, function(cell, key){
-
-                // method prop defines 
-                if (cell.method && angular.isArray(cell.params)) {
-                    $scope.callRest(cell, key);
-                } else {
-                    $scope.cells[key] = cell;
-                }
-            });
-        };
-
-        // get the versions and start the queries
-        versAPI = RestAPI.getValidVersions();
-        versAPI.get(function(s){
-            // get ids of versions
-            s.forEach(function(el){
-                RestAPI.fixedInVersionIds.push(el.id);
-            });
-
-            $scope.cells = Cells;
-            $scope.updateCharts();
+        // prepare cells for being displayed
+        Cells.setParams({
+            project: Grid[$rootScope.selectedPage].params.project,
+            page: $rootScope.selectedPage
+        }).then(function(cells){
+            $scope.cells = cells;            
 
             /**
              *  countdown and reload
              */
-            $interval(function(){
+            reload = $interval(function(){
                 if ($rootScope.countdown === 1) {
-                    var val = Math.random() * 200;
+                    // update
+                    Cells.update()
+                        .then(function(cells){
+                            $scope.cells = cells;
+                        });
 
-                    Cells[1].data = [{value: val.toFixed(1)}];
-                    $scope.cells.splice(1,1,Cells[1]);
-                        
                     $rootScope.countdown = COUNTER_INIT_VALUE;
                 }
                 else
                     $rootScope.countdown--;
             }, 1000);
 
-        }, function(e){
-            console.log(e);
+            $scope.$on('$destroy', function(){
+                $interval.cancel(reload);
+                reload = undefined;
+            });       
         });
 }])
 .controller('ViewCtrl', ['$scope', '$rootScope', '$log', 'Grid',
     function($scope, $rootScope, $log, Grid) {
 		$scope.dragged = null;
-        $scope.grid = Grid;
+        $scope.grid = Grid[$rootScope.selectedPage];
 
 		/** TODO comment */
 		$scope.dropHandler = function (source, target) {
@@ -124,18 +87,17 @@ angular.module('dbsApp.controllers', [])
 			});
 		};
 
-
-
     }// controller function
 ])
-.controller('MenuCtrl', ['$scope', '$rootScope', '$interval', 'Grid',
-    function($scope, $rootScope, $interval, Grid) {
+.controller('MenuCtrl', ['$scope', '$rootScope', '$interval', '$location', '$route', 'Grid',
+    function($scope, $rootScope, $interval, $location, $route, Grid) {
         $scope.showDropdown = false;
         $scope.grid = Grid;
-        
+
         $scope.selectPage = function(page) {
-            $rootScope.selectedPage = page;
+            $rootScope.countdown = COUNTER_INIT_VALUE;
             $scope.showDropdown = false;
+            $location.path('dashboard/' + page);
         }
     }
 ])

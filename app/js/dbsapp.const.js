@@ -1,7 +1,7 @@
 'use strict';
 
 // reload conts
-var PAGE_RELOAD = 10000;
+var PAGE_RELOAD = 5000;
 var COUNTER_INIT_VALUE = PAGE_RELOAD / 1000;
 
 // redmine path
