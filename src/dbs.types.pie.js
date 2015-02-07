@@ -60,12 +60,40 @@
 		    .attr('class', this.initClassName())
 		    .attr('transform', 'translate('+ this.dbs._width / 2 +', ' + (this.dbs._height / 3 + 10) + ')');
 
+		this._pie = d3.layout.pie()
+			.padAngle(.03) // specify pie padding
+		    .sort(null)
+		    .value(function(d) { return d.value; });
+
+		this._arc = d3.svg.arc()
+		    .innerRadius(this._radius - 40)
+		    .outerRadius(this._radius - 15);	
+
 		if (this.data.length > 0)
 			this._draw(this.data);
 
 		this._drawTooltip();
 
 		this._drawTitle();
+	};
+
+
+	/**
+	 *	Custom update function
+	 */
+	chart.update = function(data) {
+		this.data = data;
+
+		if (this._path === undefined && this.data.length > 0) {
+			this._draw(this.data);
+		} else if (this.data.length > 0) {
+			// update data
+			this._path = this._path.data(this._pie(this.data));
+			// remove missing
+			this._path.exit().remove();
+			// redraw
+			this._path.attr('d', this._arc);
+		}
 	};
 
 	/** TODO */
@@ -75,29 +103,17 @@
 			self = this;
 
 		color = d3.scale.ordinal()
-		    .range(this._colors);
-
-		arc = d3.svg.arc()
-		    .innerRadius(this._radius - 40)
-		    .outerRadius(this._radius - 15);			    
+		    .range(this._colors);		    
 
 		arcHover = d3.svg.arc()
 		    .innerRadius(this._radius - 40)
 		    .outerRadius(this._radius - 10);
 
-		pie = d3.layout.pie()
-			.padAngle(.03) // specify pie padding
-		    .sort(null)
-		    .value(function(d) { return d.value; });
-
-		v = this._chart.selectAll(this.getClassName('arc'))
-		    .data(pie(data))
-		    .enter().append('g')
-		    .attr('class', this.getClassName('arc'));
-
 		// mouse events
-		v.append('path')
-		    .attr('d', arc)
+		this._path = this._chart.selectAll('g')
+			.data(this._pie(data))
+		    .enter().append('path')
+		    .attr('d', this._arc)
 		    .attr('class', function(d) { return color(d.data.text); })
 		    .on('mouseover', function(d) {
 		    	var m;
@@ -121,7 +137,7 @@
 		    	var el = d3.select(this)
 		        	.transition()
 		        	.duration(200)
-		        	.attr('d', arc);
+		        	.attr('d', self._arc);
 
 		        self._tooltip
 		        	.style('opacity', 0);
@@ -131,9 +147,9 @@
 					.style('top', '-999px');
 
 		    });
-		
+
 		if (this._onclick) {
-			v.on('click', function(d){
+			this._path.on('click', function(d){
 				window.open(self._onclick(d, self.params), '_blank');
 			});
 		}
