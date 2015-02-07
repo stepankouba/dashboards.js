@@ -239,8 +239,6 @@
 		var color = this._color,
 			groupBy = this._groupBy;
 
-		console.log(color.domain());
-
 		var legend = this._chart.selectAll(this.byClassName('legend'))
 		    .data(color.domain().slice().reverse())
 		    .enter().append('g')
