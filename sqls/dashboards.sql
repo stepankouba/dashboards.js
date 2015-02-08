@@ -9,6 +9,7 @@ select (select count(i.id) from issues i
     where
 		 i.fixed_version_id in (6);
 
+-- passed days / number of days 
 
 -- open issues by tracker
 select t.name as tracker, is1.name as status,
@@ -33,7 +34,7 @@ select t.name, is1.name, count(i.id)
     group by t.name, is1.name;
 
 
--- open issues split by owner
+-- (USED) open issues split by owner
 select u.login, count(i.id)
 	from issues i
     inner join issue_statuses is1 on i.status_id = is1.id
@@ -44,6 +45,19 @@ select u.login, count(i.id)
     group by u.login;
 
 
+-- are we good?
+SELECT Avg(a.Resolved)
+	FROM (
+		select LEFT(j.created_on, 10) AS 'Date', count(DISTINCT i.id) as 'Resolved' 
+		from issues as i
+        INNER JOIN journals as j ON i.id=j.journalized_id AND j.journalized_type='Issue'
+		INNER JOIN journal_details as jd ON j.id=jd.journal_id AND jd.property='attr' AND jd.prop_key='status_id'
+		inner join versions as v on i.fixed_version_id = v.id
+		WHERE jd.value = 3
+			and i.project_id in (1,2,3)
+		group by Date
+    ) as a;
+
 
 -- resolved by date
 SELECT LEFT(journals.created_on, 10) AS 'Date', COUNT(DISTINCT issues.id) AS 'Resolved' FROM issues
@@ -51,7 +65,7 @@ SELECT LEFT(journals.created_on, 10) AS 'Date', COUNT(DISTINCT issues.id) AS 'Re
 	INNER JOIN journal_details ON journals.id=journal_details.journal_id AND journal_details.property='attr' AND journal_details.prop_key='status_id'
 	inner join versions as v on issues.fixed_version_id = v.id
 WHERE journal_details.value = 3 and
-    v.id in (6,9)
+    issues.project_id in (1,2,3)
 GROUP BY Date;
 
 
@@ -66,9 +80,8 @@ SELECT t.spent_on, u.login, sum(t.hours) / 8 as MDs
 -- time logged this week
 SELECT SUM(t.hours) / 8 as value
 	FROM time_entries as t
-	where t.project_id in (1, 3) and
-		yearweek(t.spent_on, 1) = yearweek(curdate(), 1);
-
+	where t.project_id in (1, 3)
+		and yearweek(t.spent_on, 1) = yearweek(curdate(), 1);
 
 -- open vs. closed for a version
 select 'open', count(distinct i.id) as sumy
@@ -94,17 +107,8 @@ select count(i.id) as value
 	from issues i
     left outer join issue_statuses s on i.status_id = s.id
     where priority_id in (4, 3) and
-        fixed_version_id in (6, 9) and
+        fixed_version_id in (6) and
         s.is_closed = 0;
-
--- number of MDs to do
-select  (select sum(t.hours) from time_entries as t where t.issue_id = i.id) as rest
-        from issues as i
-		inner join issue_statuses as s1 on i.status_id = s1.id
-        inner join versions as v on i.fixed_version_id = v.id
-	where
-		(v.id in (6,9) ) and
-        (s1.name != 'Closed' or s1.name != 'Resolved');
 
 
 -- spent time on prudcts per activity
@@ -116,15 +120,23 @@ select e.name,
 	from enumerations e
     where e.type = 'TimeEntryActivity';
 
--- to do MDs
-select i.* -- sum(i.estimated_hours * (1 - i.done_ratio))/8 as rest
+-- (USED) days till the end
+select 5 * (DATEDIFF(effective_date, curdate()) DIV 7) + MID('1234555512344445123333451222234511112345001234550', 7 * WEEKDAY(curdate()) + WEEKDAY(effective_date) + 1, 1) as value
+	from versions
+    where
+		id = 6;
+
+-- (USED) to do MDs
+select sum((i.estimated_hours * (1 - i.done_ratio/100)))/8 as rest 
 	from issues as i
     inner join issue_statuses as s1 on i.status_id = s1.id
-    -- inner join time_entries as t on t.issue_id = i.id
     where
-		i.fixed_version_id = 9
+		i.fixed_version_id = 5
+        and (i.category_id not in (select id from issue_categories where name = 'Administration')
+            or i.category_id is null)
         and s1.is_closed = 0
-        and parent_id is null;
+        and parent_id is null
+        ;
 
 
 -- version status
