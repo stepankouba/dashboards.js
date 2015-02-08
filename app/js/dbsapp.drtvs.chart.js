@@ -46,11 +46,9 @@ angular.module('dbsApp.directives.chart', ['dbsApp.directives'])
 					thresholds: $scope.conf.thresholds,
 					xProp: $scope.conf.xProp,
 					groupBy: $scope.conf.groupBy,
-					on: $scope.conf.on
-				});
-
-				// set additional params of chart
-				$scope.chart.params = RestAPI.fixedInVersionIds;
+					on: $scope.conf.on,
+					params: $scope.conf.params()
+				});				
 
 				if ($scope.load === 'true') {
 					$scope.chart.load();
