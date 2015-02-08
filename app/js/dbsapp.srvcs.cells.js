@@ -9,11 +9,11 @@ angular.module('dbsApp.services.cells', [])
 	return [
                 {
                     page: 0,
-                    pageTitle: 'Quality dashboard',
+                    pageTitle: 'Quality',
                     visible: true,
                     gridRows: [
                         {row: 1, cells: 1},
-                        {row: 2, cells: 3}
+                        {row: 2, cells: 4}
                     ],
                     params: {
                         project: 1
@@ -21,14 +21,26 @@ angular.module('dbsApp.services.cells', [])
                 },
                 {
                     page: 1,
-                    pageTitle: 'Glossary dashboard',
+                    pageTitle: 'Glossary',
                     visible: true,
                     gridRows: [
                         {row: 1, cells: 1},
-                        {row: 2, cells: 3}
+                        {row: 2, cells: 4}
                     ],
                     params: {
                         project: 2
+                    }
+                },
+                {
+                    page: 2,
+                    pageTitle: 'Common framework',
+                    visible: true,
+                    gridRows: [
+                        {row: 1, cells: 1},
+                        {row: 2, cells: 4}
+                    ],
+                    params: {
+                        project: 3
                     }
                 }
             ];
@@ -47,8 +59,8 @@ angular.module('dbsApp.services.cells', [])
             self = this;
         /**
          * function for updating the obj
+         * automatically add fixedInVersionIds in the call
          */
-        console.log(obj);
         var resp = RestAPI[obj.method].apply(RestAPI, obj.params.concat([this._params.fixedInVersionIds]));
 
         resp.get(function(s){
@@ -163,7 +175,8 @@ angular.module('dbsApp.services.cells', [])
                         click: function(d, params){
                         	return RedmineURL.getURL('trackersPerStatus',[d.trackerId, d.statusId].concat(params));
                         }
-                    }                    
+                    },
+                    params: function() { return Cells._params.fixedInVersionIds; }
                 },
                 data: [],
                 method: 'openIssuesBy',
@@ -179,11 +192,17 @@ angular.module('dbsApp.services.cells', [])
                 page: 0,
                 conf: {
                     type: 'number',
-                    title: 'Σ of Critical and Major issues'
+                    title: 'Σ of Critical and Major issues',
+                    on: {
+                        click: function(d, params) {
+                            return RedmineURL.getURL('issuesBySeverity', params);
+                        }
+                    },
+                    params: function() { return Cells._params.fixedInVersionIds; }
                 },
                 data: [],
                 method: 'openIssuesWithSeverity',
-                params: [[4,3]],
+                params: [[4,3]], // id of critical and major severities
                 response: null
             },
             {
@@ -193,18 +212,21 @@ angular.module('dbsApp.services.cells', [])
                 row: 2,
                 page: 0,
                 conf: {
-                    type: 'gauge',
-                    title: '% of open bugs / features',
-                    width: 300,
-                    height: 180,
-                    thresholds: [
-                        {className: 'green', minVal: 0, maxVal: .25},
-                        {className: 'orange', minVal: .25, maxVal: .7},
-                        {className: 'red', minVal: .7, maxVal: 1},
-                    ]
+                    type: 'number',
+                    title: 'required average FTE till the end',
+                    params: function() { return Cells._params.fixedInVersionIds; }
+                    // width: 300,
+                    // height: 180,
+                    // thresholds: [
+                    //     {className: 'green', minVal: 0, maxVal: 1.5},
+                    //     {className: 'orange', minVal: 1.5, maxVal: 1.8},
+                    //     {className: 'red', minVal: 1.8, maxVal: 4},
+                    // ]
                 },
-                data: [{value: Math.random()}],
-                response: 'ok'
+                data: [],
+                method: 'mdsToDoAverageForVersion',
+                params: [],
+                response: null
             },
             {
                 uuid: DBS.Utils.uuid(),
@@ -219,9 +241,10 @@ angular.module('dbsApp.services.cells', [])
                     title: 'bugs distributions per assignee',
                     on: {
                         click: function(d, params){
-                        	return RedmineURL.getURL('bugsPerAssignee',[d.data.id].concat(	params));
+                        	return RedmineURL.getURL('bugsPerAssignee',[d.data.id].concat(params));
                         }
-                    }
+                    },
+                    params: function() { return Cells._params.fixedInVersionIds; } 
                 },
                 // data: [{value: 20, title: 'Lukas'},
                 //     {value: 35, title: 'Stepan'},],
@@ -231,10 +254,28 @@ angular.module('dbsApp.services.cells', [])
                 params: ['assignee'],
                 response: null
             },
-            // GLOSSARY DBS
             {
                 uuid: DBS.Utils.uuid(),
                 id: 4,
+                cell: 4,
+                row: 2,
+                page: 0,
+                conf: {
+                    type: 'number',
+                    title: 'MDs till the end',
+                    params: function() { return Cells._params.fixedInVersionIds; } 
+                },
+                data: [],
+                method: 'mdsToDoForVersion',
+                params: [],
+                response: null
+            },
+            // ************************
+            // GLOSSARY DBS
+            // ************************
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 5,
                 cell: 1,
                 row: 1,
                 page: 1,
@@ -244,12 +285,13 @@ angular.module('dbsApp.services.cells', [])
                     height: 380,
                     xProp: 'status',
                     groupBy: 'tracker',
-                    title: 'GL Issues per status and tracker for project',
+                    title: 'Issues per status and tracker for project',
                     on: {
                         click: function(d, params){
                             return RedmineURL.getURL('trackersPerStatus',[d.trackerId, d.statusId].concat(params));
                         }
-                    }                    
+                    },
+                    params: function() { return Cells._params.fixedInVersionIds; }                    
                 },
                 data: [],
                 method: 'openIssuesBy',
@@ -259,40 +301,51 @@ angular.module('dbsApp.services.cells', [])
             },
             {
                 uuid: DBS.Utils.uuid(),
-                id: 5,
+                id: 6,
                 cell: 1,
                 row: 2,
                 page: 1,
                 conf: {
                     type: 'number',
-                    title: 'GL MDs spent in this week'
+                    title: 'Σ of Critical and Major issues',
+                    on: {
+                        click: function(d, params) {
+                            return RedmineURL.getURL('issuesBySeverity', params);
+                        }
+                    },
+                    params: function() { return Cells._params.fixedInVersionIds; } 
                 },
-                data: [{value: 76.8}],
-                response: 'ok'
-            },
-            {
-                uuid: DBS.Utils.uuid(),
-                id: 6,
-                cell: 2,
-                row: 2,
-                page: 1,
-                conf: {
-                    type: 'gauge',
-                    title: 'GL % of open bugs / features',
-                    width: 300,
-                    height: 180,
-                    thresholds: [
-                        {className: 'green', minVal: 0, maxVal: .25},
-                        {className: 'orange', minVal: .25, maxVal: .7},
-                        {className: 'red', minVal: .7, maxVal: 1},
-                    ]
-                },
-                data: [{value: Math.random()}],
-                response: 'ok'
+                data: [],
+                method: 'openIssuesWithSeverity',
+                params: [[4,3]], // id of critical and major severities
+                response: null
             },
             {
                 uuid: DBS.Utils.uuid(),
                 id: 7,
+                cell: 2,
+                row: 2,
+                page: 1,
+                conf: {
+                    type: 'number',
+                    title: 'required average FTE till the end',
+                    params: function() { return Cells._params.fixedInVersionIds; } 
+                    // width: 300,
+                    // height: 180,
+                    // thresholds: [
+                    //     {className: 'green', minVal: 0, maxVal: 1.5},
+                    //     {className: 'orange', minVal: 1.5, maxVal: 1.8},
+                    //     {className: 'red', minVal: 1.8, maxVal: 4},
+                    // ]
+                },
+                data: [],
+                method: 'mdsToDoAverageForVersion',
+                params: [],
+                response: null
+            },
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 8,
                 cell: 3,
                 row: 2,
                 page: 1,
@@ -300,12 +353,13 @@ angular.module('dbsApp.services.cells', [])
                     type: 'pie',
                     width: 300,
                     height: 180,
-                    title: 'GL bugs distributions per assignee',
+                    title: 'bugs distributions per assignee',
                     on: {
                         click: function(d, params){
                             return RedmineURL.getURL('bugsPerAssignee',[d.data.id].concat(  params));
                         }
-                    }
+                    },
+                    params: function() { return Cells._params.fixedInVersionIds; } 
                 },
                 // data: [{value: 20, title: 'Lukas'},
                 //     {value: 35, title: 'Stepan'},],
@@ -314,7 +368,138 @@ angular.module('dbsApp.services.cells', [])
                 method: 'openIssuesBy',
                 params: ['assignee'],
                 response: null
-            }
+            },
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 9,
+                cell: 4,
+                row: 2,
+                page: 1,
+                conf: {
+                    type: 'number',
+                    title: 'MDs till the end',
+                    params: function() { return Cells._params.fixedInVersionIds; } 
+                },
+                data: [],
+                method: 'mdsToDoForVersion',
+                params: [],
+                response: null
+            },
+            // ************************
+            // COMMON FRAMEWORK DBS
+            // ************************
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 10,
+                cell: 1,
+                row: 1,
+                page: 2,
+                conf: {
+                    type: 'stackedbar',
+                    width: 600,
+                    height: 380,
+                    xProp: 'status',
+                    groupBy: 'tracker',
+                    title: 'Issues per status and tracker for project',
+                    on: {
+                        click: function(d, params){
+                            return RedmineURL.getURL('trackersPerStatus',[d.trackerId, d.statusId].concat(params));
+                        }
+                    },
+                    params: function() { return Cells._params.fixedInVersionIds; }         
+                },
+                data: [],
+                method: 'openIssuesBy',
+                params: ['tracker'],
+                response: null
+
+            },
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 11,
+                cell: 1,
+                row: 2,
+                page: 2,
+                conf: {
+                    type: 'number',
+                    title: 'Σ of Critical and Major issues',
+                    on: {
+                        click: function(d, params) {
+                            return RedmineURL.getURL('issuesBySeverity', params);
+                        }
+                    },
+                    params: function() { return Cells._params.fixedInVersionIds; } 
+                },
+                data: [],
+                method: 'openIssuesWithSeverity',
+                params: [[4,3]], // id of critical and major severities
+                response: null
+            },
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 12,
+                cell: 2,
+                row: 2,
+                page: 2,
+                conf: {
+                    type: 'number',
+                    title: 'required average FTE till the end',
+                    params: function() { return Cells._params.fixedInVersionIds; } 
+                    // width: 300,
+                    // height: 180,
+                    // thresholds: [
+                    //     {className: 'green', minVal: 0, maxVal: 1.5},
+                    //     {className: 'orange', minVal: 1.5, maxVal: 1.8},
+                    //     {className: 'red', minVal: 1.8, maxVal: 4},
+                    // ]
+                },
+                data: [],
+                method: 'mdsToDoAverageForVersion',
+                params: [],
+                response: null
+            },
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 13,
+                cell: 3,
+                row: 2,
+                page: 2,
+                conf: {
+                    type: 'pie',
+                    width: 300,
+                    height: 180,
+                    title: 'bugs distributions per assignee',
+                    on: {
+                        click: function(d, params){
+                            return RedmineURL.getURL('bugsPerAssignee',[d.data.id].concat(  params));
+                        }
+                    },
+                    params: function() { return Cells._params.fixedInVersionIds; } 
+                },
+                // data: [{value: 20, title: 'Lukas'},
+                //     {value: 35, title: 'Stepan'},],
+                // response: 'ok'
+                data:[],
+                method: 'openIssuesBy',
+                params: ['assignee'],
+                response: null
+            },
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 14,
+                cell: 4,
+                row: 2,
+                page: 2,
+                conf: {
+                    type: 'number',
+                    title: 'MDs till the end',
+                    params: function() { return Cells._params.fixedInVersionIds; } 
+                },
+                data: [],
+                method: 'mdsToDoForVersion',
+                params: [],
+                response: null
+            },
         ];
 
         return Cells;

@@ -41,6 +41,20 @@ factory('RestAPI', ['$rootScope', '$resource', function($rootScope, $resource){
 					this.url + '/dashboard/issues/open/severity/' + severity.join() + '/' + fixedInVersionIds.join(),
 					{},
 					{'get': {method: 'GET', isArray: true}});
-		}
+		},
+
+		mdsToDoAverageForVersion: function(fixedInVersionIds) {
+			return $resource(
+					this.url + '/dashboard/mds/perday/' + fixedInVersionIds.join(),
+					{},
+					{'get': {method: 'GET', isArray: true}});	
+		},
+
+		mdsToDoForVersion: function(fixedInVersionIds) {
+			return $resource(
+					this.url + '/dashboard/mds/todo/' + fixedInVersionIds.join(),
+					{},
+					{'get': {method: 'GET', isArray: true}});	
+		},
 	};
 }]);

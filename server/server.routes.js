@@ -29,6 +29,16 @@ var routes = [
         httpMethod: 'GET',
         middleware: [api.openIssuesWithSeverity]
     },
+    {
+        path: '/api/' + conf.apiVersion + '/dashboard/mds/todo/:versions',
+        httpMethod: 'GET',
+        middleware: [api.mdsToDoForVersion]
+    },
+    {
+        path: '/api/' + conf.apiVersion + '/dashboard/mds/perday/:versions',
+        httpMethod: 'GET',
+        middleware: [api.mdsToDoAverageForVersion]
+    },
     // All other get requests should be handled by AngularJS's client-side routing system
     {
         path: '/app/*',

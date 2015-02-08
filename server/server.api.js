@@ -6,6 +6,8 @@
  */
 var mysql = require('mysql'),
     conf = require('./server.conf.js'),
+    sqls = require('./server.sqls.js'),
+    Q = require('Q'),
     pool = mysql.createPool({
         host: conf.db.host,
         user: conf.db.user,
@@ -28,10 +30,7 @@ api = {
                 console.log(err);
                 res.sendStatus(500);
             } else {
-                c.query('select * from versions \
-                    where project_id = ? and \
-                        status = \'open\' and \
-                        date_format(effective_date, \'%Y-%m\')=date_format(now(), \'%Y-%m\');',
+                c.query(sqls.validVersions,
                     [project], 
                     function (err, rows, fields){
                         if (err) {
@@ -63,16 +62,7 @@ api = {
                 console.log(err);
                 res.sendStatus(500);
             } else {
-                c.query('select t.id as trackerId, t.name as tracker, is1.id as statusId, is1.name as status, \
-                            (select count(i.id) \
-                                from issues i \
-                                inner join versions as v on i.fixed_version_id = v.id \
-                                where (v.id in (?)) and \
-                                i.status_id = is1.id and \
-                                i.tracker_id = t.id) as value \
-                        from trackers t, issue_statuses is1 \
-                        where \
-                            is1.is_closed = 0;',
+                c.query(sqls.openIssuesByTracker,
                     [versions], 
                     function (err, rows, fields){
                         if (err) {
@@ -103,15 +93,7 @@ api = {
                 console.log(err);
                 res.sendStatus(500);
             } else {
-                c.query('select u.id as id, u.login as text, count(i.id) as value \
-                            from issues i \
-                            inner join issue_statuses is1 on i.status_id = is1.id \
-                            inner join users u on i.assigned_to_id = u.id \
-                            inner join versions as v on i.fixed_version_id = v.id \
-                            where \
-                                (v.id in (?)) and \
-                                is1.is_closed = 0 \
-                            group by u.login;',
+                c.query(sqls.openIssuesByAssignee,
                     [versions], 
                     function (err, rows, fields){
                         if (err) {
@@ -138,12 +120,7 @@ api = {
                 console.log(err);
                 res.sendStatus(500);
             } else {
-                c.query('select count(i.id) as value \
-                        from issues i \
-                        left outer join issue_statuses s on i.status_id = s.id \
-                        where priority_id in (?) \
-                            and fixed_version_id in (?) \
-                            and s.is_closed = 0;',
+                c.query(sqls.openIssuesWithSeverity,
                         [severity, versions],
                         function(err, rows, fields){
                             if (err) {
@@ -159,6 +136,66 @@ api = {
                             c.release();
                         }
                 );
+            }
+        });
+    },
+    mdsToDoForVersion: function(req,res,next) {
+        var versions = req.params.versions.split(',');
+
+        pool.getConnection(function(err, c){
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+            } else {
+                c.query(sqls.mdsToDoForVersion,
+                    [versions],
+                    function(err, rows, fields){
+                         if (err) {
+                            console.log(err);
+                            res.sendStatus(500);
+                        } else {
+                            console.log(rows);
+                            res.type('application/json');
+                            res.send(rows);
+                        }
+
+                        // return connection back to the pool
+                        c.release();
+                    }
+                );
+            }
+        });
+    },
+    mdsToDoAverageForVersion: function(req,res,next) {
+        var versions = req.params.versions.split(',');
+
+        pool.getConnection(function(err, c){
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+            } else {
+                var queryFn = Q.nbind(c.query,c);
+
+                Q.all([queryFn(sqls.mdsToDoForVersion, [versions]), queryFn(sqls.daysForVersion, [versions])])
+                    .then(function(r){
+                        var response = [];
+                        // used simple mds / days in graph
+                        response.push({value: Math.round(r[0][0][0].value / r[1][0][0].value * 100) / 100});
+
+                        res.type('application/json');
+                        res.send(response);
+
+                        // return connection back to the pool
+                        c.release();
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                        res.sendStatus(500);
+
+                        // return connection back to the pool
+                        c.release();
+                    });
+                
             }
         });
     }
