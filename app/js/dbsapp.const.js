@@ -1,17 +1,20 @@
 'use strict';
 
 // reload conts
-var PAGE_RELOAD = 5000;
+var PAGE_RELOAD = 60000;
 var COUNTER_INIT_VALUE = PAGE_RELOAD / 1000;
 
 // redmine path
 var RedmineURL = {
+	// TODO - URLs are not prepared to handle multiple projects / versions in one request
 	getURL: function(url, params) {
 		var str = this[url],
 			replaced;
 
 		if (!str) 
 			throw new Error('RedmineUrl: url not specified');
+
+		console.log(params);
 
 		if (!angular.isArray(params))
 			throw new Error('RedmineUrl: params not an array');			
@@ -33,5 +36,10 @@ var RedmineURL = {
 	_trackersPerStatus: 'https://project.simplity.eu/issues?utf8=✓&set_filter=1&f[]=tracker_id&op[tracker_id]==&v[tracker_id][]={{0}}&f[]=status_id&op[status_id]==&v[status_id][]={{1}}&f[]=fixed_version_id&op[fixed_version_id]==&v[fixed_version_id][]={{2}}&v[fixed_version_id][]={{3}}&',
 	get trackersPerStatus() {
 		return this._trackersPerStatus + this._visibleColumns;	
+	},
+
+	_issuesBySeverity: 'https://project.simplity.eu/issues?utf8=✓&set_filter=1&f[]=fixed_version_id&op[fixed_version_id]==&v[fixed_version_id][]={{0}}&f[]=priority_id&op[priority_id]==&v[priority_id][]=4&f[]=priority_id&op[priority_id]==&v[priority_id][]=3&',
+	get issuesBySeverity() {
+		return this._issuesBySeverity + this._visibleColumns;		
 	}
 };
