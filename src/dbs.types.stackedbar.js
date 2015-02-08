@@ -52,6 +52,7 @@
 		this.w = conf.width || this.dbs._width;
 		this.h = conf.height || this.dbs._height;
 		this._title = conf.title;
+		this._params = conf.params;
 
 		if (!conf.xProp)
 			throw Error('DBS: initiating stackedbar graph without defining xProp');
@@ -183,7 +184,7 @@
 
 		if (this._onclick) {
 			r.on('click', function(d){
-				window.open(self._onclick(d, self.params), '_blank');
+				window.open(self._onclick(d, self._params), '_blank');
 			});
 		}
 

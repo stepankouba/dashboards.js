@@ -22,6 +22,7 @@ DBS.Charts = DBS.Charts || {};
 		_thresholds: null,
 		_chart: null,
 		_title: null,
+		_params: null, // additonal params
 		/**
 		 * create a chart like class name for any part of the 
 		 */

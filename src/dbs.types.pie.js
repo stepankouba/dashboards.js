@@ -44,6 +44,7 @@
 		this.h = conf.height || 150;
 		this._radius = conf.radius || Math.min(this.w, this.h) / 2;
 		this._title = conf.title;
+		this._params = conf.params;
 
 		if (conf.on) {
 			this._onclick = conf.on.click || null;
@@ -150,7 +151,7 @@
 
 		if (this._onclick) {
 			this._path.on('click', function(d){
-				window.open(self._onclick(d, self.params), '_blank');
+				window.open(self._onclick(d, self._params), '_blank');
 			});
 		}
 

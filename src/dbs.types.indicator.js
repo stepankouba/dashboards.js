@@ -31,6 +31,7 @@
 	 */
 	chart.init = function(conf) {
 		this.data = conf.data;
+		this._params = conf._params;
 		
 		if (!conf.thresholds)
 			throw Error('DBS: initiating indicator without thresholds');

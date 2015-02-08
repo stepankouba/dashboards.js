@@ -52,6 +52,9 @@ svg {
   fill: none;
   stroke: black;
 }
+.dbs-chart-number-clickable {
+  cursor: pointer;
+}
 .dbs-chart-number-value {
   font-size: 48px;
   color: #a6a6a6;
@@ -67,6 +70,9 @@ svg {
   display: block;
   height: 20%;
   text-align: center;
+}
+.dbs-chart-pie > path {
+  cursor: pointer;
 }
 .dbs-chart-pie-title {
   text-anchor: middle;
@@ -154,11 +160,15 @@ svg {
   font-size: 12px;
   color: #a6a6a6;
   fill: #a6a6a6;
+  text-anchor: middle;
 }
 .dbs-chart-stackedbar-legend {
   font-size: 12px;
   color: #a6a6a6;
   fill: #a6a6a6;
+}
+.dbs-chart-stackedbar-legend > text {
+  text-anchor: end;
 }
 .dbs-chart-stackedbar-fill-one {
   fill: #3a92c9;

@@ -29,7 +29,8 @@
 	chart.init = function(conf) {
 		this.data = conf.data;
 		this._title = conf.title;
-		
+		this._params = conf.params;
+
 		if (conf.on) {
 			this._onclick = conf.on.click || null;
 			this._onmouseout = conf.on.mouseout || null;
@@ -59,13 +60,13 @@
 
 	/** TODO comment */
 	chart._draw = function(data) {
-		var s,
+		var s, link,
 			self = this;
 
 		s = this._chart.selectAll('span')
 			.data(data);
 
-		s.enter()
+		link = s.enter()
 			.append('span')
 			.attr('class', this.getClassName('value'));
 		
@@ -85,6 +86,13 @@
 	                this.textContent = Math.round(i(t) * round) / round;
 	            };
 	        });
+
+	    if (this._onclick) {
+	    	link.classed(this.getClassName('clickable'), true);
+	    	link.on('click', function(){
+				window.open(self._onclick(null, self._params), '_blank');
+			});
+	    }
 	};
 
 	// add type

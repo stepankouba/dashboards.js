@@ -32,6 +32,7 @@
 		this.w = conf.width || 150;
 		this.h = conf.height || 150;
 		this._radius = conf.radius || 50;
+		this._params = conf._params;
 
 		if (!conf.thresholds)
 			throw Error('DBS: initiating arcOne graph without thresholds');

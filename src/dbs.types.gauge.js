@@ -92,6 +92,7 @@
 		this.w = conf.width || 200;
 		this.h = conf.height || 150;
 		this._title = conf.title;
+		this._params = conf._params;
 
 		if (!conf.thresholds)
 			throw Error('DBS: initiating gauge graph without thresholds');

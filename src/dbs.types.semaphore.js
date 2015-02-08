@@ -43,6 +43,7 @@
 		this._display = conf.display || 'full';
 		this._radius = conf.radius || 15;
 		this._opac = conf.opacity || .3; // for not visible
+		this._params = conf._params;
 
 		if (!conf.thresholds)
 			throw Error('DBS: initiating semaphore graph without thresholds');

@@ -34,6 +34,7 @@
 		this.data = conf.data;
 		this.w = conf.width || this.dbs._width;
 		this.h = conf.height || this.dbs._height;
+		this._params = conf._params;
 		
 		this._thresholds = conf.thresholds || [];
 
