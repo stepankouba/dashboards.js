@@ -59,7 +59,7 @@ html, body {
 	min-height: @row-min-height;
 
 	&:nth-of-type(1) {
-		min-height: @row-min-height * 2;
+		min-height: @row-min-height * 1.7;
 	}
 }
 
@@ -120,33 +120,18 @@ span.dbsapp-visible {
 	color: @red;
 }
 
-.dbsapp-dropdown {
-	cursor: pointer;
-	font-size: 16px;
-}
-
-.dbsapp-dropdown-menu {
+.dbsapp-menu {
 	position: absolute;
-	top: 20px;
-	min-width: 200px; 
-
-
-	background-color: @editor-bkg-color;
-	padding: 5px 5px 5px 10px;
-
+	top: 40px;
 
 	li {
-		list-style: none;
-		padding: 2px;
-		
-		[role="menuitem"] {
-			color: @menu-color;
-			text-decoration: none;
-			cursor: pointer;
+		display: inline-block;
+		padding: 5px 5px 5px 5px;
+		cursor: pointer;
+	}
 
-			&:hover {
-				color: @a-hover-color;
-			}
-		}
+	.dbsapp-menu-active {
+		background-color: @editor-bkg-color;
+		border-radius: 4px;
 	}
 }

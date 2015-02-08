@@ -23,19 +23,12 @@
 </head>
 
 <body>
-	<section id="dbsapp-nav" ng-controller="MenuCtrl">
-		<div class="pull-left">
-			<div class="dropdown">
-			  <span class="dbsapp-dropdown" aria-haspopup="true" role="button" aria-expanded="false" ng-click="showDropdown = !showDropdown">
-			    {{grid[selectedPage].pageTitle}} <i class="caret"></i>
-			  </span>
-			  <ul class="dbsapp-dropdown-menu" role="menu" aria-labelledby="dLabel" ng-show="showDropdown">
-			  	<li role="presentation" ng-repeat="value in grid">
-			  		<span role="menuitem" tabindex="-1" ng-click="selectPage(value.page)">{{value.pageTitle}}</span>
-			  	</li>
-			  </ul>
-			</div>
-		</div>
+	<section id="dbsapp-nav" ng-controller="MenuCtrl" role="navigation">
+		<ul class="nav nav-pills dbsapp-menu">
+			<li role="presentation" ng-repeat="value in grid" ng-class="selectedPage === value.page ? 'dbsapp-menu-active' : ''">
+		  		<span role="menuitem" tabindex="-1" ng-click="selectPage(value.page)">{{value.pageTitle}}</span>
+		  	</li>
+		</ul>
 		<div class="pull-right">
 			<span ng-class="countdown <= 10 ? 'dbsapp-cnt-warning' : 'dbsapp-cnt-ok'">{{countdown}}</span>
 		</div>
