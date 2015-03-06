@@ -39,6 +39,8 @@
 
 	/** TODO comment */
 	chart.init = function(conf) {
+		console.log(conf);
+
 		this.data = conf.data;
 		this.w = conf.width || 150;
 		this.h = conf.height || 150;

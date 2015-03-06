@@ -154,7 +154,6 @@ api = {
                             console.log(err);
                             res.sendStatus(500);
                         } else {
-                            console.log(rows);
                             res.type('application/json');
                             res.send(rows);
                         }
@@ -198,7 +197,109 @@ api = {
                 
             }
         });
-    }
+    },
+    avgIssuesChangedToStatus: function(req, res, next) {
+        var status = req.params.status,
+            projects = req.params.projects.split(',');
+
+        pool.getConnection(function(err, c){
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+            } else {
+                c.query(sqls.avgIssuesChangedToStatus,
+                        [status, projects],
+                        function(err, rows, fields){
+                            if (err) {
+                                console.log(err);
+                                res.sendStatus(500);
+                            } else {
+                                res.type('application/json');
+                                res.send(rows);
+                            }
+
+                            c.release();
+                        }
+                );
+            }
+        });
+
+    },
+    mdsFromStart: function(req, res, next) {
+        var projects = req.params.projects.split(',');
+
+        pool.getConnection(function(err, c){
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+            } else {
+                c.query(sqls.mdsFromStart,
+                        [projects],
+                        function(err, rows, fields){
+                            if (err) {
+                                console.log(err);
+                                res.sendStatus(500);
+                            } else {
+                                res.type('application/json');
+                                res.send(rows);
+                            }
+
+                            c.release();
+                        }
+                );
+            }
+        });
+    },
+    mdsFiveDaysActive: function(req, res, next) {
+        var projects = req.params.projects.split(',');
+
+        pool.getConnection(function(err, c){
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+            } else {
+                c.query(sqls.mdsFiveDaysActive,
+                        [projects],
+                        function(err, rows, fields){
+                            if (err) {
+                                console.log(err);
+                                res.sendStatus(500);
+                            } else {
+                                res.type('application/json');
+                                res.send(rows);
+                            }
+
+                            c.release();
+                        }
+                );
+            }
+        });
+    },
+    mdsFromLastWeek: function(req, res, next) {
+        var projects = req.params.projects.split(',');
+
+        pool.getConnection(function(err, c){
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+            } else {
+                c.query(sqls.mdsFromLastWeek,
+                        [projects],
+                        function(err, rows, fields){
+                            if (err) {
+                                console.log(err);
+                                res.sendStatus(500);
+                            } else {
+                                res.type('application/json');
+                                res.send(rows);
+                            }
+
+                            c.release();
+                        }
+                );
+            }
+        });
+    },
 };
 
 

@@ -1,3 +1,4 @@
+
 -- sum open and all
 select (select count(i.id) from issues i
 		inner join issue_statuses is2 on i.status_id = is2.id
@@ -11,7 +12,7 @@ select (select count(i.id) from issues i
 
 -- passed days / number of days 
 
--- open issues by tracker
+-- (USED) open issues by tracker
 select t.name as tracker, is1.name as status,
 	(select count(i.id)
 		from issues i
@@ -45,8 +46,8 @@ select u.login, count(i.id)
     group by u.login;
 
 
--- are we good?
-SELECT Avg(a.Resolved)
+-- (USED) are we good?
+SELECT Avg(a.Resolved) as value
 	FROM (
 		select LEFT(j.created_on, 10) AS 'Date', count(DISTINCT i.id) as 'Resolved' 
 		from issues as i
@@ -68,6 +69,19 @@ WHERE journal_details.value = 3 and
     issues.project_id in (1,2,3)
 GROUP BY Date;
 
+-- (USED) time logged for last 5 days for all those that were active in the redmine
+SELECT DISTINCT u.login as name, 
+	(select ifnull(sum(t.hours) / 8, 0)
+		from time_entries as t
+        where t.project_id in (1,2,3)
+			and t.spent_on > date_sub(curdate(), INTERVAL 6 day)
+            and t.user_id = u.id
+	) as value
+	FROM journals as j
+    inner join users as u on u.id = j.user_id
+    where
+		date(j.created_on) > date_sub(curdate(), INTERVAL 10 day)
+	;
 
 -- time entries for last 5 working days
 SELECT t.spent_on, u.login, sum(t.hours) / 8 as MDs
@@ -77,11 +91,19 @@ SELECT t.spent_on, u.login, sum(t.hours) / 8 as MDs
 		t.spent_on > date_sub(curdate(), INTERVAL 6 day)
     group by t.spent_on, t.user_id;
 
--- time logged this week
+-- (USED) time logged last week
 SELECT SUM(t.hours) / 8 as value
 	FROM time_entries as t
-	where t.project_id in (1, 3)
-		and yearweek(t.spent_on, 1) = yearweek(curdate(), 1);
+	where t.project_id in (1, 2, 3)
+		and t.tweek = weekofyear(curdate()) - 1
+	;
+
+-- (USED) spent time on prudcts from start
+select round(sum(t.hours) / 8, 2) as value
+	from time_entries t
+	where 
+		project_id in (1, 2, 3);
+	
 
 -- open vs. closed for a version
 select 'open', count(distinct i.id) as sumy
@@ -111,14 +133,6 @@ select count(i.id) as value
         s.is_closed = 0;
 
 
--- spent time on prudcts per activity
-select e.name, 
-		(select round(sum(t.hours) / 8, 2)
-			from time_entries t
-            where t.activity_id = e.id and
-				project_id in (1, 2, 3)) as celkem
-	from enumerations e
-    where e.type = 'TimeEntryActivity';
 
 -- (USED) days till the end
 select 5 * (DATEDIFF(effective_date, curdate()) DIV 7) + MID('1234555512344445123333451222234511112345001234550', 7 * WEEKDAY(curdate()) + WEEKDAY(effective_date) + 1, 1) as value
@@ -150,7 +164,7 @@ select i.id as ID, i.subject, s1.name as status, p.name,
         inner join projects as p on i.project_id = p.id
         inner join versions as v on i.fixed_version_id = v.id
 	where
-		(v.id in (6, 9) ) and
+		(v.id in (6) ) and
         (s1.name != 'Closed' and s1.name != 'Resolved')
 union
 	select i.id as ID, i.subject, s1.name as status, p.name,
@@ -163,6 +177,12 @@ union
         inner join projects as p on i.project_id = p.id
         inner join versions as v on i.fixed_version_id = v.id
 	where
-		(v.id in (6.9) ) and
+		(v.id in (6) ) and
         (s1.name = 'Closed' or s1.name = 'Resolved');
+
+
+select * from versions 
+		where project_id in (2) and 
+			status = 'open' and 
+            date_format(effective_date, '%Y-%m')=date_format(now(), '%Y-%m');
 

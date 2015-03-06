@@ -37,7 +37,7 @@
 	
 	/** TODO comment */
 	chart.init = function(conf) {
-		this.data = conf.data;
+		this.data = conf.data[0].value;
 		this.w = conf.width || 20;
 		this.h = conf.height || 100;
 		this._display = conf.display || 'full';
@@ -48,7 +48,8 @@
 		if (!conf.thresholds)
 			throw Error('DBS: initiating semaphore graph without thresholds');
 
-		this._thresholds = conf.thresholds;
+		this._thresholds.set(conf.thresholds);
+		this._thresholds.sort();
 
 		if (conf.on) {
 			this._onclick = conf.on.click || null;
@@ -69,7 +70,7 @@
 
 	/** TODO comment */
 	chart._draw = function(data) {
-		var t = this._thresholds,
+		var t = this._thresholds.get(),
 			r = this._radius,
 			o = this._opac,
 			c,
@@ -78,7 +79,7 @@
 		if (this._display === 'single') {
 			c = this._chart
 				.selectAll('circle')
-				.data(data)
+				.data([data])
 				.enter()
 				.append('circle');
 

@@ -24,6 +24,31 @@ svg {
 .dbs-chart-bar-value {
   fill: #3a92c9;
 }
+.dbs-chart-bar-x-axis {
+  font-size: 12px;
+  color: #a6a6a6;
+  fill: #a6a6a6;
+}
+.dbs-chart-bar-x-axis path {
+  margin-top: 5px;
+  fill: none;
+  stroke: #777;
+  shape-rendering: crispEdges;
+}
+.dbs-chart-bar-y-axis {
+  font-size: 12px;
+  color: #a6a6a6;
+  fill: #a6a6a6;
+}
+.dbs-chart-bar-y-axis path {
+  margin-top: 5px;
+  fill: none;
+  stroke: #777;
+  shape-rendering: crispEdges;
+}
+.dbs-chart-bar-y-axis text {
+  text-anchor: end;
+}
 .dbs-chart-gauge {
   margin: auto;
   padding: 0;
@@ -38,6 +63,19 @@ svg {
   font-size: 12px;
   color: #a6a6a6;
   fill: #a6a6a6;
+}
+.dbs-chart-gauge-tooltip {
+  display: inline-block;
+  font-size: 12px;
+  background-color: #c7c7c7;
+  border-radius: 4px;
+  position: absolute;
+  min-width: 60px;
+  min-height: 28px;
+  padding: 4px;
+}
+.dbs-chart-gauge-tooltip span {
+  color: #2e2b2a;
 }
 .dbs-chart-gauge-green {
   fill: #3a92c9;
@@ -199,4 +237,53 @@ svg {
 }
 .dbs-chart-stackedbar-fill-ten {
   fill: #17becf;
+}
+.dbs-chart-table {
+  margin: auto;
+  padding: 25px 15px 0px 40px;
+  overflow-y: scroll;
+}
+.dbs-chart-table table {
+  width: 80%;
+  display: block;
+  margin: auto;
+}
+.dbs-chart-table th,
+.dbs-chart-table td {
+  min-width: 150px;
+}
+.dbs-chart-table th,
+.dbs-chart-table tr,
+.dbs-chart-table td {
+  color: #a6a6a6;
+}
+.dbs-chart-table-title {
+  font-size: 12px;
+  color: #a6a6a6;
+  fill: #a6a6a6;
+  width: 300px;
+  display: block;
+  margin: 40px auto;
+}
+.dbs-chart-table-tooltip {
+  display: inline-block;
+  font-size: 12px;
+  background-color: #c7c7c7;
+  border-radius: 4px;
+  position: absolute;
+  min-width: 60px;
+  min-height: 28px;
+  padding: 4px;
+}
+.dbs-chart-table-tooltip span {
+  color: #2e2b2a;
+}
+.dbs-chart-table-green {
+  fill: #3a92c9;
+}
+.dbs-chart-table-orange {
+  fill: #ed8f28;
+}
+.dbs-chart-table-red {
+  fill: #e23932;
 }

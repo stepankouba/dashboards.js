@@ -38,7 +38,7 @@ describe('DBS.js init', function(){
 	});
 
 	it('should create list of chart types', function(){
-		var listOfTypes = ['arcone', 'bar', 'gauge', 'indicator', 'line', 'number', 'pie', 'semaphore', 'stackedbar'],
+		var listOfTypes = ['arcone', 'bar', 'gauge', 'indicator', 'line', 'number', 'pie', 'semaphore', 'stackedbar', 'table'],
 			list = DBS.Charts.getAvailableTypes();
 
 		expect(list).toEqual(listOfTypes);

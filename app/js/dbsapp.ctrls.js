@@ -17,7 +17,7 @@ angular.module('dbsApp.controllers', [])
         $scope.showEditor = function(id) {
             var EditorInstance;
 
-            if (id !== null) {
+            if (id) {
                 EditorInstance = Editor.show(
                     $scope.cells.filter(function(x){ return x.uuid === id; })[0],
                     {controller:'EditorCtrl'});
@@ -29,7 +29,7 @@ angular.module('dbsApp.controllers', [])
                 });
                 
             } else {
-
+                // something
             }   
 
             $rootScope.editorVisible = !$rootScope.editorVisible;

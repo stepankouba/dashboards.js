@@ -37,7 +37,8 @@
 		if (!conf.thresholds)
 			throw Error('DBS: initiating arcOne graph without thresholds');
 		
-		this._thresholds = conf.thresholds;
+		this._thresholds.set(conf.thresholds);
+		this._thresholds.sort();
 
 		if (conf.on) {
 			this._onclick = conf.on.click || null;
@@ -79,7 +80,7 @@
 	/** TODO */
 	chart._draw = function(value) {
 		// arc function
-		var t = this._thresholds,
+		var t = this._thresholds.get(),
 			v, arc,
 			self = this;
 

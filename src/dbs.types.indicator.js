@@ -36,7 +36,8 @@
 		if (!conf.thresholds)
 			throw Error('DBS: initiating indicator without thresholds');
 
-		this._thresholds = conf.thresholds;
+		this._thresholds.set(conf.thresholds);
+		this._thresholds.sort();
 
 		if (conf.on) {
 			this._onclick = conf.on.click || null;
@@ -58,7 +59,7 @@
 	/** TODO comment */
 	chart._draw = function(data) {
 		var s,
-			t = this._thresholds,
+			t = this._thresholds.get(),
 			self = this;
 
 		s = this._chart.selectAll('span')

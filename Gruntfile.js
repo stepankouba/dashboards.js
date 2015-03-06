@@ -9,17 +9,17 @@ module.exports = function(grunt) {
         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
         '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
         '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n' +
-        '\n\'use strict\';\n',
+        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n'
+        + '\n\'use strict\';\n',
 
         // Task configuration.
         concat: {
             options: {
                 // Replace all 'use strict' statements in the code with a single one at the top
-                banner: '<%= banner %>',
+                //banner: '<%= banner %>',
                 process: function(src, filepath) {
                   return '// Source: ' + filepath + '\n' +
-                    src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+                    src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '');
                 }
                 /*
                 stripBanners: true*/
@@ -43,7 +43,8 @@ module.exports = function(grunt) {
                 banner: '<%= banner %>',
                 mangle: {
                     except: ['angular', 'DBS']
-                }
+                },
+                sourceMap: true
             },
             lib: {
                 src: '<%= concat.lib.dest %>',

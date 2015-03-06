@@ -1,103 +1,43 @@
 /**
- *
+ * @file Dashboards.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
  */
 'use strict';
 
+/**
+ * @name DBS.Charts
+ * @namespace
+ * 
+ * @description
+ * DBS.Charts covers basic functionality over supported charts and provides DBS.Chart object, which is predecessor for all supported charts.
+ * Besides this, basic operations with list of charts is provided by methods.
+ * 
+ * @public
+ */
 DBS.Charts = DBS.Charts || {};
 
-(function(global){
+(function(){
 	var CT = DBS.Charts;
 
 	/**
-	 * General Chart object
-	 * predecessor for all chart objects
+	 * Map of available chart types. Each type contains {@link DBS.Charts.Chart}
+	 *
+	 * @name DBS.Charts._types
+	 * @kind member
+	 * @private
 	 */
-	CT.Chart = {
-		name: null,
-		_svg: true, // default value
-		_data: null,
-		_onclick: null, // TODO implement onlcick
-		_onmouseover: null, // TODO implement onmouseover
-		_onmouseout: null, // TODO implement onmouseout
-		_thresholds: null,
-		_chart: null,
-		_title: null,
-		_params: null, // additonal params
-		/**
-		 * create a chart like class name for any part of the 
-		 */
-		getClassName: function(optName) {
-			optName = optName ? '-' + optName : '';
-
-			return 'dbs-chart-' + this.name + optName;
-		},
-		/**
-		 * use for CSS like selects using class name for any part of the 
-		 */
-		byClassName: function(optName) {
-			return '.' + this.getClassName(optName);
-		},
-		/**
-		 *	creates initial classes for a chart
-		 */
-		initClassName: function() {
-			return 'dbs-chart dbs-chart-' + this.name ;
-		},
-
-		/** TODO  general update method*/
-		update: function(data) {
-			this.data = data;
-
-			if (this.data.length > 0)
-				this._draw(this.data);
-		},
-
-		/** TODO  comment */
-		set data(values) {
-			this._data = values;
-		},
-
-		/** TODO  comment */
-		get data() {
-			return this._data;
-		},
-
-		/** TODO  comment */
-		get w() {
-			return this._w;
-		},
-
-		/** TODO  comment */
-		set w(val) {
-			this._w = val;
-		},
-
-		/** TODO  comment */
-		get h() {
-			return this._h;
-		},
-
-		/** TODO  comment */
-		set h(val) {
-			this._h = val;
-		},
-
-		/** TODO comment */		
-		get params() {
-			return this._params;
-		},
-
-		/** TODO comment */		
-		set params(val) {
-			this._params = val;
-		},		
-
-	};
-
-	/** TODO comment */
 	CT._types = {};
 
-	/** TODO create function */
+	/** 
+	 * Add new type
+	 * 
+	 * @name DBS.Charts.addType
+	 * @kind function
+	 * @throws Error if type is already in the _types
+	 * @param {DBS.Charts.Chart} type
+	 */
 	CT.addType = function(type) {
 		if (this._types[type.name])
 			throw Error('DBS: type ' + type.name + ' already existing');
@@ -105,7 +45,14 @@ DBS.Charts = DBS.Charts || {};
 		this._types[type.name] = type;
 	};
 
-	/** TODO get Type function */
+	/**
+	 * get particular type. If not exists, throw error
+	 * 
+	 * @name DBS.Charts.getType
+	 * @kind function
+	 * @throws Error if the type does not exist
+	 * @returns {DBS.Charts.Chart}
+	 */
 	CT.getType = function(name) {
 		if (this._types[name] === undefined)
 			throw Error('DBS: cannot get chart type: ' + name);
@@ -113,7 +60,13 @@ DBS.Charts = DBS.Charts || {};
 		return this._types[name];
 	};
 
-	/** TODO get Types function */
+	/**
+	 * Get list of all available types
+	 *
+	 * @name DBS.Charts.getAvailableTypes
+	 * @kind function
+	 * @returns {Array}
+	 */
 	CT.getAvailableTypes = function() {
 		var types = [];
 

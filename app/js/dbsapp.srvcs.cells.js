@@ -42,6 +42,18 @@ angular.module('dbsApp.services.cells', [])
                     params: {
                         project: 3
                     }
+                },
+                {
+                    page: 3,
+                    pageTitle: 'Timesheets',
+                    visible: true,
+                    gridRows: [
+                        {row: 1, cells: 1},
+                        {row: 2, cells: 3}
+                    ],
+                    params: {
+                        project: [1,2,3]
+                    }
                 }
             ];
 }])
@@ -56,12 +68,21 @@ angular.module('dbsApp.services.cells', [])
      */
     Cells._callRest = function(obj, key) {
         var def = $q.defer(),
-            self = this;
+            self = this,
+            fixedInVersions = [];
+        
+        // automatically add fixed in version parameters if required
+        obj.fixedInProjectVersions.forEach(function(el,key){
+            fixedInVersions.push(self._params.fixedInVersionIds[el]);
+        });
+        obj.params = fixedInVersions.length > 0 ?
+                 obj.params.concat([fixedInVersions]) : obj.params;
+
         /**
          * function for updating the obj
          * automatically add fixedInVersionIds in the call
          */
-        var resp = RestAPI[obj.method].apply(RestAPI, obj.params.concat([this._params.fixedInVersionIds]));
+        var resp = RestAPI[obj.method].apply(RestAPI, obj.params);
 
         resp.get(function(s){
             obj.data = s;
@@ -121,7 +142,8 @@ angular.module('dbsApp.services.cells', [])
         
         this._defer = $q.defer();
 
-        this._params.fixedInVersionIds = [];
+        // structure of this is {project_id:}
+        this._params.fixedInVersionIds = {};
         this._params.project = params.project;
         this._params.page = params.page;
         
@@ -131,13 +153,13 @@ angular.module('dbsApp.services.cells', [])
         versAPI.get(function(s){
             // get ids of versions
             s.forEach(function(el){
-                self._params.fixedInVersionIds.push(el.id);
+                self._params.fixedInVersionIds[el.project_id] = el.id;
             });
 
             self._update();
         }, function(e){
             console.log(e);
-            this._defer.reject(e);
+            self._defer.reject(e);
         });
 
         return this._defer.promise;
@@ -176,11 +198,12 @@ angular.module('dbsApp.services.cells', [])
                         	return RedmineURL.getURL('trackersPerStatus',[d.trackerId, d.statusId].concat(params));
                         }
                     },
-                    params: function() { return Cells._params.fixedInVersionIds; }
+                    params: function() { return [Cells._params.fixedInVersionIds['1']]; }
                 },
                 data: [],
                 method: 'openIssuesBy',
                 params: ['tracker'],
+                fixedInProjectVersions: ['1'],
                 response: null
 
             },
@@ -198,11 +221,12 @@ angular.module('dbsApp.services.cells', [])
                             return RedmineURL.getURL('issuesBySeverity', params);
                         }
                     },
-                    params: function() { return Cells._params.fixedInVersionIds; }
+                    params: function() { return [Cells._params.fixedInVersionIds['1']]; }
                 },
                 data: [],
                 method: 'openIssuesWithSeverity',
                 params: [[4,3]], // id of critical and major severities
+                fixedInProjectVersions: ['1'],
                 response: null
             },
             {
@@ -213,8 +237,7 @@ angular.module('dbsApp.services.cells', [])
                 page: 0,
                 conf: {
                     type: 'number',
-                    title: 'required average FTE till the end',
-                    params: function() { return Cells._params.fixedInVersionIds; }
+                    title: 'required average FTE till the end'
                     // width: 300,
                     // height: 180,
                     // thresholds: [
@@ -226,6 +249,7 @@ angular.module('dbsApp.services.cells', [])
                 data: [],
                 method: 'mdsToDoAverageForVersion',
                 params: [],
+                fixedInProjectVersions: ['1'],
                 response: null
             },
             {
@@ -238,13 +262,14 @@ angular.module('dbsApp.services.cells', [])
                     type: 'pie',
                     width: 300,
                     height: 180,
+                    radius: 80,
                     title: 'bugs distributions per assignee',
                     on: {
                         click: function(d, params){
                         	return RedmineURL.getURL('bugsPerAssignee',[d.data.id].concat(params));
                         }
                     },
-                    params: function() { return Cells._params.fixedInVersionIds; } 
+                    params: function() { return [Cells._params.fixedInVersionIds['1']]; } 
                 },
                 // data: [{value: 20, title: 'Lukas'},
                 //     {value: 35, title: 'Stepan'},],
@@ -252,6 +277,7 @@ angular.module('dbsApp.services.cells', [])
                 data:[],
                 method: 'openIssuesBy',
                 params: ['assignee'],
+                fixedInProjectVersions: ['1'],
                 response: null
             },
             {
@@ -263,11 +289,11 @@ angular.module('dbsApp.services.cells', [])
                 conf: {
                     type: 'number',
                     title: 'MDs till the end',
-                    params: function() { return Cells._params.fixedInVersionIds; } 
                 },
                 data: [],
                 method: 'mdsToDoForVersion',
                 params: [],
+                fixedInProjectVersions: ['1'],
                 response: null
             },
             // ************************
@@ -291,11 +317,12 @@ angular.module('dbsApp.services.cells', [])
                             return RedmineURL.getURL('trackersPerStatus',[d.trackerId, d.statusId].concat(params));
                         }
                     },
-                    params: function() { return Cells._params.fixedInVersionIds; }                    
+                    params: function() { return [Cells._params.fixedInVersionIds['2']]; }                    
                 },
                 data: [],
                 method: 'openIssuesBy',
                 params: ['tracker'],
+                fixedInProjectVersions: ['2'],
                 response: null
 
             },
@@ -313,11 +340,12 @@ angular.module('dbsApp.services.cells', [])
                             return RedmineURL.getURL('issuesBySeverity', params);
                         }
                     },
-                    params: function() { return Cells._params.fixedInVersionIds; } 
+                    params: function() { return [Cells._params.fixedInVersionIds['2']]; }
                 },
                 data: [],
                 method: 'openIssuesWithSeverity',
                 params: [[4,3]], // id of critical and major severities
+                fixedInProjectVersions: ['2'],
                 response: null
             },
             {
@@ -328,8 +356,7 @@ angular.module('dbsApp.services.cells', [])
                 page: 1,
                 conf: {
                     type: 'number',
-                    title: 'required average FTE till the end',
-                    params: function() { return Cells._params.fixedInVersionIds; } 
+                    title: 'required average FTE till the end'
                     // width: 300,
                     // height: 180,
                     // thresholds: [
@@ -341,6 +368,7 @@ angular.module('dbsApp.services.cells', [])
                 data: [],
                 method: 'mdsToDoAverageForVersion',
                 params: [],
+                fixedInProjectVersions: ['2'],
                 response: null
             },
             {
@@ -353,13 +381,14 @@ angular.module('dbsApp.services.cells', [])
                     type: 'pie',
                     width: 300,
                     height: 180,
+                    radius: 80,
                     title: 'bugs distributions per assignee',
                     on: {
                         click: function(d, params){
                             return RedmineURL.getURL('bugsPerAssignee',[d.data.id].concat(  params));
                         }
                     },
-                    params: function() { return Cells._params.fixedInVersionIds; } 
+                    params: function() { [Cells._params.fixedInVersionIds['2']]; } 
                 },
                 // data: [{value: 20, title: 'Lukas'},
                 //     {value: 35, title: 'Stepan'},],
@@ -367,6 +396,7 @@ angular.module('dbsApp.services.cells', [])
                 data:[],
                 method: 'openIssuesBy',
                 params: ['assignee'],
+                fixedInProjectVersions: ['2'],
                 response: null
             },
             {
@@ -377,12 +407,12 @@ angular.module('dbsApp.services.cells', [])
                 page: 1,
                 conf: {
                     type: 'number',
-                    title: 'MDs till the end',
-                    params: function() { return Cells._params.fixedInVersionIds; } 
+                    title: 'MDs till the end'
                 },
                 data: [],
                 method: 'mdsToDoForVersion',
                 params: [],
+                fixedInProjectVersions: ['2'],
                 response: null
             },
             // ************************
@@ -406,11 +436,12 @@ angular.module('dbsApp.services.cells', [])
                             return RedmineURL.getURL('trackersPerStatus',[d.trackerId, d.statusId].concat(params));
                         }
                     },
-                    params: function() { return Cells._params.fixedInVersionIds; }         
+                    params: function() { return [Cells._params.fixedInVersionIds['3']]; }         
                 },
                 data: [],
                 method: 'openIssuesBy',
                 params: ['tracker'],
+                fixedInProjectVersions: ['3'],
                 response: null
 
             },
@@ -428,11 +459,12 @@ angular.module('dbsApp.services.cells', [])
                             return RedmineURL.getURL('issuesBySeverity', params);
                         }
                     },
-                    params: function() { return Cells._params.fixedInVersionIds; } 
+                    params: function() { return [Cells._params.fixedInVersionIds['3']]; } 
                 },
                 data: [],
                 method: 'openIssuesWithSeverity',
                 params: [[4,3]], // id of critical and major severities
+                fixedInProjectVersions: ['3'],
                 response: null
             },
             {
@@ -443,8 +475,7 @@ angular.module('dbsApp.services.cells', [])
                 page: 2,
                 conf: {
                     type: 'number',
-                    title: 'required average FTE till the end',
-                    params: function() { return Cells._params.fixedInVersionIds; } 
+                    title: 'required average FTE till the end'
                     // width: 300,
                     // height: 180,
                     // thresholds: [
@@ -456,6 +487,7 @@ angular.module('dbsApp.services.cells', [])
                 data: [],
                 method: 'mdsToDoAverageForVersion',
                 params: [],
+                fixedInProjectVersions: ['3'],
                 response: null
             },
             {
@@ -468,13 +500,14 @@ angular.module('dbsApp.services.cells', [])
                     type: 'pie',
                     width: 300,
                     height: 180,
+                    radius: 80,
                     title: 'bugs distributions per assignee',
                     on: {
                         click: function(d, params){
                             return RedmineURL.getURL('bugsPerAssignee',[d.data.id].concat(  params));
                         }
                     },
-                    params: function() { return Cells._params.fixedInVersionIds; } 
+                    params: function() { return [Cells._params.fixedInVersionIds['3']]; } 
                 },
                 // data: [{value: 20, title: 'Lukas'},
                 //     {value: 35, title: 'Stepan'},],
@@ -482,6 +515,7 @@ angular.module('dbsApp.services.cells', [])
                 data:[],
                 method: 'openIssuesBy',
                 params: ['assignee'],
+                fixedInProjectVersions: ['3'],
                 response: null
             },
             {
@@ -498,8 +532,93 @@ angular.module('dbsApp.services.cells', [])
                 data: [],
                 method: 'mdsToDoForVersion',
                 params: [],
+                fixedInProjectVersions: ['3'],
                 response: null
             },
+            // ************************
+            // All projects effort
+            // ************************
+            {
+               uuid: DBS.Utils.uuid(),
+                id: 15,
+                cell: 1,
+                row: 1,
+                page: 3,
+                conf: {
+                    type: 'bar',
+                    width: 600,
+                    height: 380,
+                    margin: {top: 10, left: 30, right: 0, bottom: 30},
+                    title: 'Time log entries for last 5 days based on Redmine activity',
+                    thresholds: [
+                        {className: 'red', minVal: 0, maxVal: 3},
+                        {className: 'orange', minVal: 3, maxVal: 4},
+                        {className: 'green', minVal: 4, maxVal: 10}
+                    ]
+                },
+                data: [],
+                method: 'mdsFivedaysActive',
+                params: [[1,2,3]], //projects ids
+                fixedInProjectVersions: [],
+                response: null
+
+            },
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 16,
+                cell: 1,
+                row: 2,
+                page: 3,
+                conf: {
+                    type: 'number',
+                    title: 'Σ of MDs from start'
+                },
+                data: [],
+                method: 'mdsFromStart',
+                params: [[1,2,3]], //projects ids
+                fixedInProjectVersions: [],
+                response: null
+            },
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 17,
+                cell: 2,
+                row: 2,
+                page: 3,
+                conf: {
+                    type: 'number',
+                    title: 'Σ of MDs logged last week',
+                },
+                data: [],
+                method: 'mdsFromLastWeek',
+                params: [[1,2,3]], // projects ids
+                fixedInProjectVersions: [],
+                response: null
+            },
+            {
+                uuid: DBS.Utils.uuid(),
+                id: 18,
+                cell: 3,
+                row: 2,
+                page: 3,
+                conf: {
+                    type: 'gauge',
+                    title: 'Avg resolved per day',
+                    width: 300,
+                    height: 200,
+                    thresholds: [
+                        //{className: 'red', minVal: 0, maxVal: 2},
+                        {className: 'orange', minVal: 2, maxVal: 2.8},
+                        {className: 'green', minVal: 2.8, maxVal: 8},
+                        {className: 'red', minVal: 0, maxVal: 2},
+                    ]
+                },
+                data: [],
+                method: 'avgIssueChangedToStatus',
+                params: [3, [1,2,3]], //status, projects ids
+                fixedInProjectVersions: [],
+                response: null
+            }
         ];
 
         return Cells;

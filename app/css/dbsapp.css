@@ -123,19 +123,22 @@ body {
   padding: 10px;
   min-height: 200px;
 }
-.dbsapp-row:nth-of-type(1) {
+.dbsapp-row .col-md-12 {
   min-height: 340px;
 }
+.dbsapp-row .col-md-12 > .dbsapp-chart-content {
+  min-height: 340px !important;
+}
 .dbsapp-cell {
-  height: 100%;
   background-color: transparent;
   padding: 0 5px;
-}
-.dbsapp-cell .dbsapp-chart-settings {
-  background-color: rgba(255, 255, 255, 0.05);
-  margin: auto;
   height: 100%;
+}
+.dbsapp-cell .dbsapp-chart-content {
+  background-color: rgba(255, 255, 255, 0.05);
   min-height: 200px;
+  margin: auto;
+  padding: 0px 0 0 0px;
 }
 .dbsapp-hidden {
   display: none;

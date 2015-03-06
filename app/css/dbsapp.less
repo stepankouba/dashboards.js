@@ -58,8 +58,12 @@ html, body {
 	padding: 10px;
 	min-height: @row-min-height;
 
-	&:nth-of-type(1) {
+	& .col-md-12 {
 		min-height: @row-min-height * 1.7;
+
+		& > .dbsapp-chart-content {
+			min-height: @row-min-height * 1.7 !important;
+		}
 	}
 }
 
@@ -67,13 +71,15 @@ html, body {
 	height: 100%;
 	background-color: transparent;
 	padding: 0 5px;
+	height: 100%;
 
 	// div container for chart
-	.dbsapp-chart-settings {
-		background-color: rgba(255, 255, 255, 0.05);
-		margin: auto;
-		height: 100%;
+	.dbsapp-chart-content {
+		background-color: @cell-content-bkg-color;
 		min-height: @row-min-height;
+		margin: auto;
+
+		padding: 0px 0 0 0px;
 	}
 }
 

@@ -25,6 +25,10 @@ server.use('/', function(req, res, next) {
 	next();
 });
 
+server.use(function(err, req, res, next){
+	console.log('Error is here: ', err.stack);
+});
+
 // use body parser
 //server.use(express.bodyParser());
 //server.use(express.methodOverride());

@@ -7,3 +7,29 @@
 .dbs-chart-bar-value {
 	fill: @blue;
 }
+
+.dbs-chart-bar-x-axis {
+	.dbs-title();
+
+	path {
+		margin-top: 5px;
+		fill: none;
+        stroke: #777;
+        shape-rendering: crispEdges;
+	}
+}
+
+.dbs-chart-bar-y-axis {
+	.dbs-title();
+
+	path {
+		margin-top: 5px;
+		fill: none;
+        stroke: #777;
+        shape-rendering: crispEdges;
+	}
+
+	text {
+		text-anchor: end;
+	}
+}

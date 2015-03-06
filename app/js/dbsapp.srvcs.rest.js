@@ -22,7 +22,6 @@ factory('RestAPI', ['$rootScope', '$resource', function($rootScope, $resource){
 		},
 		
 		openIssuesBy: function(by, fixedInVersionIds) {
-
 			if (!by)
 				throw new Error('RestAPI.openIssuesBy: parameter not specified');
 
@@ -43,6 +42,13 @@ factory('RestAPI', ['$rootScope', '$resource', function($rootScope, $resource){
 					{'get': {method: 'GET', isArray: true}});
 		},
 
+		avgIssueChangedToStatus: function(status, projects) {
+			return $resource(
+					this.url + '/dashboard/issues/avarage/' + status + '/' + projects.join(),
+					{},
+					{'get': {method: 'GET', isArray: true}});
+		},
+
 		mdsToDoAverageForVersion: function(fixedInVersionIds) {
 			return $resource(
 					this.url + '/dashboard/mds/perday/' + fixedInVersionIds.join(),
@@ -56,5 +62,23 @@ factory('RestAPI', ['$rootScope', '$resource', function($rootScope, $resource){
 					{},
 					{'get': {method: 'GET', isArray: true}});	
 		},
+		mdsFromStart: function(projects) {
+			return $resource(
+					this.url + '/dashboard/mds/from/start/' + projects.join(),
+					{},
+					{'get': {method: 'GET', isArray: true}});	
+		},
+		mdsFromLastWeek: function(projects) {
+			return $resource(
+					this.url + '/dashboard/mds/from/lastweek/' + projects.join(),
+					{},
+					{'get': {method: 'GET', isArray: true}});	
+		},
+		mdsFivedaysActive: function(projects) {
+			return $resource(
+					this.url + '/dashboard/mds/fivedays/' + projects.join(),
+					{},
+					{'get': {method: 'GET', isArray: true}});	
+		}
 	};
 }]);

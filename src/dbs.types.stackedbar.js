@@ -74,11 +74,10 @@
 		// create _chart
 		this._chart = this.dbs.root
 		    .append('g')
-		    .attr('class', this.initClassName())
-		    ;
+		    .attr('class', this.initClassName());
 
 		// prepare axis
-		this._drawAxis();
+		this._prepare();
 		
 		// draw the chart
 		if (this.data.length > 0)
@@ -87,12 +86,15 @@
 		// draw title
 		this._drawTitle();
 
+		// draw axis
+		this._drawAxis();
+
 		// draw legend
 		this._drawLegend();
 	};
 	
 	/** TODO comment */
-	chart._drawAxis = function() {
+	chart._prepare = function() {
 		var w = this.w,
 			h = this.h,
 			xProp = this._xProp,
@@ -102,9 +104,10 @@
 		this._x = d3.scale.ordinal()
 					.rangeRoundBands([0, w], .1, 0);
 		
-		// set default y (y0) and y for separated stacks
+		// set default y (y0) and y (y1) for separated stacks
+		// TODO needs to remove h-10 hack and replace with standard solution
 		this._y0 = d3.scale.ordinal()
-					.rangeRoundBands([h, 0], .2);
+					.rangeRoundBands([h-10, 0], .2);
 		this._y1 = d3.scale.linear();
 
 		this._xAxis = d3.svg.axis()
@@ -197,10 +200,20 @@
 		      .text(function(d) { return 'pokus'; });*/
 
 
-		group.filter(function(d, i) { return !i; })
+		this._group = group;
+	};
+
+	chart._drawAxis = function() {
+		var self = this,
+			y0 = this._y0,
+			y1 = this._y1;
+
+		//group.filter(function(d, i) { return !i; })
+		this._chart
 			.append('g')
 		    .attr('class', this.getClassName('axis'))
-		    .attr('transform', 'translate(0,' + (y0.rangeBand() + 3 )+ ')')
+		    //.attr('transform', 'translate(0,' + (y0.rangeBand() + 3 )+ ')')
+		    .attr('transform', 'translate(0,' + (this.h - 25) + ')')
 		    .call(this._xAxis)
 		    .on('click', function(e){
 
@@ -221,8 +234,6 @@
 		    		g.selectAll('rect').attr('y', function(d) { return y1(d.value + d.valueOffset); });
 		    	}	
 			});
-
-		this._group = group;
 	};
 
 	/** TODO */

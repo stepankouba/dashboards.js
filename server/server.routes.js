@@ -30,6 +30,11 @@ var routes = [
         middleware: [api.openIssuesWithSeverity]
     },
     {
+        path: '/api/' + conf.apiVersion + '/dashboard/issues/avarage/:status/:projects',
+        httpMethod: 'GET',
+        middleware: [api.avgIssuesChangedToStatus]
+    },
+    {
         path: '/api/' + conf.apiVersion + '/dashboard/mds/todo/:versions',
         httpMethod: 'GET',
         middleware: [api.mdsToDoForVersion]
@@ -39,6 +44,22 @@ var routes = [
         httpMethod: 'GET',
         middleware: [api.mdsToDoAverageForVersion]
     },
+    {
+        path: '/api/' + conf.apiVersion + '/dashboard/mds/from/start/:projects',
+        httpMethod: 'GET',
+        middleware: [api.mdsFromStart]
+    },
+    {
+        path: '/api/' + conf.apiVersion + '/dashboard/mds/from/lastweek/:projects',
+        httpMethod: 'GET',
+        middleware: [api.mdsFromLastWeek]
+    },
+    {
+        path: '/api/' + conf.apiVersion + '/dashboard/mds/fivedays/:projects',
+        httpMethod: 'GET',
+        middleware: [api.mdsFiveDaysActive]
+    },
+
     // All other get requests should be handled by AngularJS's client-side routing system
     {
         path: '/app/*',

@@ -7,10 +7,11 @@
 angular.module('dbsApp.directives.chart', ['dbsApp.directives'])
 .directive('dbsappChart', ['RestAPI', function(RestAPI) {
 	var tpl = '<div> \
-			<div class="dbsapp-chart-settings"> \
-				<span ng-click="settingsClick()" class="fa fa-cog" ng-show="response == \'ok\'"></span> \
-				<span class="fa fa-circle-o-notch fa-spin" ng-show="response != \'ok\'"></span> \
-			</div> \
+				<div class="dbsapp-chart-settings"> \
+					<span ng-click="settingsClick()" class="fa fa-cog" ng-show="response == \'ok\'"></span> \
+					<span class="fa fa-circle-o-notch fa-spin" ng-show="response != \'ok\'"></span> \
+				</div> \
+				<div class="dbsapp-chart-content"></div> \
 			</div>';
 
 	return {
@@ -28,7 +29,7 @@ angular.module('dbsApp.directives.chart', ['dbsApp.directives'])
 		// TODO comment
 		link: function($scope, elem, attr) {
 			elem.attr('id', 'container-for-' + $scope.dbsappId);
-			elem.find('div').attr('id', $scope.dbsappId);
+			angular.element(elem.children()[1]).attr('id', $scope.dbsappId);
 
 			var w = $scope.conf.width,
 				h = $scope.conf.height;
@@ -47,7 +48,9 @@ angular.module('dbsApp.directives.chart', ['dbsApp.directives'])
 					xProp: $scope.conf.xProp,
 					groupBy: $scope.conf.groupBy,
 					on: $scope.conf.on,
-					params: $scope.conf.params()
+					params: angular.isDefined($scope.conf.params) ? $scope.conf.params() : null,
+					margin: $scope.conf.margin || undefined,
+					radius: $scope.conf.radius || undefined
 				});				
 
 				if ($scope.load === 'true') {
