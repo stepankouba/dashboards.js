@@ -6,7 +6,7 @@
  */
 module.exports = {
     // default values
-    port: 8080,
+    port: 8888,
     db: {
         host: '192.168.10.54',
         user: 'search',

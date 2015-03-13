@@ -8,7 +8,7 @@ angular.module('dbsApp.services.rest', ['ngResource']).
 factory('RestAPI', ['$rootScope', '$resource', function($rootScope, $resource){
 	return {
 		server: 'localhost',
-		port: '8080',
+		port: '8888',
 		apiVersion: '0.1.0',
 		
 		get url() {
