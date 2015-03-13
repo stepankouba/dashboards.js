@@ -1,24 +1,36 @@
 /**
- *	data: [],
- *  on {
+ * @file dbs.types.arcone.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
+ *
+ * @name DBS.Charts.ArcOne
+ * @namespace
+ * 
+ * @description
+ * This file covers manipulation with Arc One chart
+ * 
+ * Configuration object attributes of ArcOne chart
+ * @example
+ * { 
+ *	data: [{value: XXX}],
+ *  on: {
  * 		mouseover: function
  *		click: function
- *  }
+ *  },
  *	thresholds: [
- *		{pattern: xxx, className: '', minVal: xxx, maxVal: xxx}
- *	]
- * 	}
- *	width:
- *  height:
- *  needle: {
- * 		length:
- * 		radius:	
+ *		{className: '', minVal: xxx, maxVal: xxx},
+ * 		{className: '', minVal: xxx, maxVal: xxx},
+ *		],
+ * 	width: XXX,
+ *  height: XXX,
+ *  radius:	XXX,
+ *  params: []
  * }
  */
-
  'use strict';
 
-(function(global){
+(function(){
 	var D = DBS;
 	var CT = D.Charts,
 		chart = Object.create(CT.Chart);
@@ -35,11 +47,11 @@
 		this._params = conf._params;
 
 		if (!conf.thresholds)
-			throw Error('DBS: initiating arcOne graph without thresholds');
+			throw Error('DBS: initiating arcOne chart without thresholds');
 		
 		this._thresholds.set(conf.thresholds);
-		this._thresholds.sort();
 
+		// TODO - handlers are not implemented yet in this chart
 		if (conf.on) {
 			this._onclick = conf.on.click || null;
 			this._onmouseout = conf.on.mouseout || null;

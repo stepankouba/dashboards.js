@@ -1,18 +1,27 @@
 /**
- *	data: [],
- *  on {
+ * @file dbs.types.line.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
+ *
+ * @name DBS.Charts.Line
+ * @namespace
+ * 
+ * @description
+ * This file covers manipulation with Line chart.
+ * !! Line chart is not fully implemented yet. STILL PROOF OF CONCEPT !!
+ * 
+ * Configuration object attributes of Line chart
+ * @example
+ * { 
+ *	data: [{value: XXX},...],
+ *  on: {
  * 		mouseover: function
  *		click: function
- *  }
- *	thresholds: [
- *		{pattern: xxx, className: '', minVal: xxx, maxVal: xxx}
- *	]
- * 	}
- *	width:
- *  height:
- *  needle: {
- * 		length:
- * 		radius:	
+ *  },
+ * 	width: XXX,
+ *  height: XXX,
+ *  _params: []
  * }
  */
 
@@ -35,8 +44,7 @@
 		this.h = conf.height || 190;
 		this._params = conf._params;
 		
-		this._thresholds.set(conf.thresholds);
-		this._thresholds.sort();
+		// this._thresholds.set(conf.thresholds);
 
 		if (conf.on) {
 			this._onclick = conf.on.click || null;

@@ -1,19 +1,34 @@
 /**
- *	data: [
- *		{value:, groupByValue:, property defined as xProp to be on x axis}
- *	],
- *  on {
+ * @file dbs.types.stackedbar.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
+ *
+ * @name DBS.Charts.Stackedbar
+ * @namespace
+ * 
+ * @description
+ * This file covers manipulation with Stackedbar chart
+ * 
+ * Configuration object attributes of Stackedbar chart
+ * @example
+ * { 
+ *	data: [{value: XXX, ...} ,...],
+ *  on: {
  * 		mouseover: function
  *		click: function
- *  }
+ *  },
  *	thresholds: [
- *		{pattern: xxx, className: '', minVal: xxx, maxVal: xxx}
- *	]
- * 	}
- *	width:
- *  height:
- *  xProp: // defined property, that is on x value
- *  groupBy: by which value to group values 
+ *		{className: '', minVal: xxx, maxVal: xxx},
+ * 		{className: '', minVal: xxx, maxVal: xxx},
+ *		],
+ *  title: XXXX,
+ * 	width: XXX,
+ *  xProp: string (value of the xProp is used to determine which value from data is placed on X axis)
+ *  groupBy: string (value of the groupBy is used to group value by particular values in data)
+ *  height: XXX,
+ *  params: []
+ * }
  */
 
  'use strict';

@@ -1,14 +1,29 @@
 /**
- *	data: [
- *		{value: xxx, text: xxx}
- *	],
- *  legend: xxx
- *  on {
- * 		mouseover: function
- *		click: function
- *  }	
- *  
+ * @file dbs.types.number.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
+ *
+ * @name DBS.Charts.Number
+ * @namespace
+ * 
+ * @description
+ * This file covers manipulation with Number.
+ * 
+ * Configuration object attributes of Number
+ * @example
+ * { 
+ *	data: [{value: XXX}],
+ *  on: {
+ * 		mouseover: function,
+ *		click: function,
+ *		...
+ *  },
+ *	title: XXX,
+ *  params: [xxx,xxxx,...]
+ * }
  */
+
 
  'use strict';
 

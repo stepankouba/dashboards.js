@@ -1,18 +1,31 @@
 /**
- *	data: [],
- *  on {
+ * @file dbs.types.table.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
+ *
+ * @name DBS.Charts.Table
+ * @namespace
+ * 
+ * @description
+ * This file covers manipulation with Table chart
+ * 
+ * Configuration object attributes of Table chart
+ * @example
+ * { 
+ *	data: [{value: XXX, ...} ,...],
+ *  on: {
  * 		mouseover: function
  *		click: function
- *  }
+ *  },
  *	thresholds: [
- *		{className: '', minVal: xxx, maxVal: xxx}
- *	]
- * 	}
- *	width:
- *  height:
- *  needle: {
- * 		length:
- * 		radius:	
+ *		{className: '', minVal: xxx, maxVal: xxx},
+ * 		{className: '', minVal: xxx, maxVal: xxx},
+ *		],
+ *  title: XXXX,
+ * 	width: XXX,
+ *  height: XXX,
+ *  params: []
  * }
  */
 
@@ -60,18 +73,15 @@
 
 	/** TODO comment */
 	chart.init = function(conf) {
-		var self = this;
-
 		this.w = conf.width || null;
 		this.h = conf.height || null;
 		this._title = conf.title;
-		this._params = conf._params;
+		this._params = conf.params;
 
 		this.data = this._extractData(conf.data);
 		this._columns = this._extractColumns(conf.data);
 
 		this._thresholds.set(conf.thresholds || []);
-		this._thresholds.sort();
 
 		if (conf.on) {
 			this._onclick = conf.on.click || null;

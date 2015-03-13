@@ -1,14 +1,32 @@
 /**
- *	data: [],
- *  on {
+ * @file dbs.types.arcone.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
+ *
+ * @name DBS.Charts.Pie
+ * @namespace
+ * 
+ * @description
+ * This file covers manipulation with Pie chart
+ * 
+ * Configuration object attributes of Pie chart
+ * @example
+ * { 
+ *	data: [{value: XXX}],
+ *  on: {
  * 		mouseover: function
  *		click: function
- *  }
- *	width:
- *  height:
- *  needle: {
- * 		length:
- * 		radius:	
+ *  },
+ *	thresholds: [
+ *		{className: '', minVal: xxx, maxVal: xxx},
+ * 		{className: '', minVal: xxx, maxVal: xxx},
+ *		],
+ *	title: XXX,
+ * 	width: XXX,
+ *  height: XXX,
+ *  radius:	XXX,
+ *  params: []
  * }
  */
 

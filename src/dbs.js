@@ -24,6 +24,9 @@
  *	// chart related configuration
  *	type: 'bar' // bar chart
  * });
+ * 
+ * // load particular chart
+ * c.load();
  *  
  */
 var DBS = DBS || {};
@@ -82,7 +85,7 @@ var DBS = DBS || {};
 	 *
 	 * @name DBS.create
 	 * @kind function
-	 * @param {Object} definition general related configuration {@link DBS._init}
+	 * @param {Object} definition general related configuration 			
 	 * @param {Object} definition of chart related configuration (type, title, thresholds,...)
 	 *
 	 * @returns {DBS.Chart} returns DBS chart object {@link DBS.Chart}  
@@ -94,14 +97,14 @@ var DBS = DBS || {};
 		// get chart option for using SVG (by default)
 		conf.svg = c._svg;
 
-		// init DBS
+		// init DBS and create dbs object inside every chart
 		c.dbs = DBS._init(conf);
 
 		// set width 
 		g.width = c.dbs._width;
 		g.height = c.dbs._height;
 
-		// init chart using CHart's init method
+		// init chart using Chart's init method
 		try {
 			c.init(g);
 		} catch(e) {

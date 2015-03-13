@@ -1,19 +1,39 @@
 /**
- *	data: [],
- *  on {
+ * @file dbs.types.semaphore.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
+ *
+ * @name DBS.Charts.Semaphore
+ * @namespace
+ * 
+ * @description
+ * This file covers manipulation with Semaphore chart
+ * 
+ * Configuration object attributes of Semaphore chart. Except of standard configuration, there is also a display value.
+ * 
+ * @example
+ * { 
+ *	data: [{value: XXX}],
+ *  on: {
  * 		mouseover: function
  *		click: function
- *  }
+ *  },
  *	thresholds: [
- *		{pattern: xxx, className: xxx, minVal: xxx, maxVal: xxx}
- *	]
- *  display: single // only one circle will be displayed
- * 			 full // full semaphore
- * 	}
- *	width:
- *  height:
- *  radius:
- *  opacity:  
+ *		{className: '', minVal: xxx, maxVal: xxx},
+ * 		{className: '', minVal: xxx, maxVal: xxx},
+ *		],
+ * 	display: either 'full' or 'single'
+ * 	width: XXX,
+ *  height: XXX,
+ *  radius:	XXX,
+ *  opacity: value in decimal (0 not visible, 1 fully visible)
+ *  params: [],
+ *  needle: {
+ * 		length: XXX,
+ *		radius: XXX,	
+ *	} 
+ * }
  */
 
  'use strict';
@@ -43,13 +63,12 @@
 		this._display = conf.display || 'full';
 		this._radius = conf.radius || 15;
 		this._opac = conf.opacity || .3; // for not visible
-		this._params = conf._params;
+		this._params = conf.params;
 
 		if (!conf.thresholds)
 			throw Error('DBS: initiating semaphore graph without thresholds');
 
 		this._thresholds.set(conf.thresholds);
-		this._thresholds.sort();
 
 		if (conf.on) {
 			this._onclick = conf.on.click || null;

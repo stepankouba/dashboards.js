@@ -1,18 +1,37 @@
 /**
- *	data: [],
- *  on {
+ * @file dbs.types.gauge.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
+ *
+ * @name DBS.Charts.Gauge
+ * @namespace
+ * 
+ * @description
+ * This file covers manipulation with Gauge chart
+ * 
+ * Configuration object attributes of Gauge chart. Except of standard configuration, there is also a need object,
+ * defining the needle.
+ * @example
+ * { 
+ *	data: [{value: XXX}],
+ *  on: {
  * 		mouseover: function
  *		click: function
- *  }
+ *  },
  *	thresholds: [
- *		{className: '', minVal: xxx, maxVal: xxx}
- *	]
- * 	}
- *	width:
- *  height:
+ *		{className: '', minVal: xxx, maxVal: xxx},
+ * 		{className: '', minVal: xxx, maxVal: xxx},
+ *		],
+ *	title: XXX,
+ * 	width: XXX,
+ *  height: XXX,
+ *  radius:	XXX,
+ *  params: [],
  *  needle: {
- * 		length:
- * 		radius:	
+ * 		length: XXX,
+ *		radius: XXX,	
+ *	} 
  * }
  */
 
@@ -99,7 +118,6 @@
 			throw Error('DBS: initiating gauge graph without thresholds');
 		
 		this._thresholds.set(conf.thresholds);
-		this._thresholds.sort();
 
 		if (conf.on) {
 			this._onclick = conf.on.click || null;

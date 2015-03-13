@@ -1,18 +1,36 @@
 /**
- *	data: [],
- *  on {
+ * @file dbs.types.bar.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
+ *
+ * @name DBS.Charts.Bar
+ * @namespace
+ * 
+ * @description
+ * This file covers manipulation with Bar chart
+ * 
+ * Configuration object attributes of Bar chart
+ * @example
+ * { 
+ *	data: [{value: XXX},...],
+ *  on: {
  * 		mouseover: function
  *		click: function
- *  }
+ *  },
  *	thresholds: [
- *		{pattern: xxx, className: '', minVal: xxx, maxVal: xxx}
- *	]
- * 	}
- *	width:
- *  height:
- *  needle: {
- * 		length:
- * 		radius:	
+ *		{className: '', minVal: xxx, maxVal: xxx},
+ * 		{className: '', minVal: xxx, maxVal: xxx},
+ *		],
+ *	margin: {
+ *		left: XXX,
+ * 		right: XXX,
+ *		top: XXX,
+ *		bottom: XXX	
+ *  },
+ * 	width: XXX,
+ *  height: XXX,
+ *  params: []
  * }
  */
 
@@ -34,7 +52,7 @@
 		this.data = conf.data;
 		this.w = conf.width || this.dbs._width;
 		this.h = (conf.height) || this.dbs._height;
-		this._params = conf._params;
+		this._params = conf.params;
 			
 		if (conf.margin) {
 			this.h = this.h - conf.margin.top - conf.margin.bottom;
@@ -42,8 +60,8 @@
 			this.margin = conf.margin;
 		}
 
-		this._thresholds.set(conf.thresholds);
-		this._thresholds.sort();
+		// no implementation using thresholds so far
+		// this._thresholds.set(conf.thresholds);
 
 		if (conf.on) {
 			this._onclick = conf.on.click || null;
@@ -59,8 +77,8 @@
 		    .append('g')
 		    .attr('class', this.initClassName());
 
+		// TODO - remove this part and replace with proper implementation in DBS.Charts.Chart object
 		if (this.margin) {
-			
 			this.dbs.root
 				.attr('width', this.w + this.margin.left + this.margin.right)
 				.attr('height', this.h + this.margin.top + this.margin.bottom);
@@ -95,6 +113,7 @@
 				
 	};
 
+	/** TODO */
 	chart.update = function(values){
 		return;
 	};
@@ -109,9 +128,6 @@
 			x = this._x,
 			r,
 			self = this;
-
-		console.log(values.map(function(d){return d.value;} ));
-		console.log(values.map(function(d){return y(d.value);} ));
 
 		x.domain(values.map(function(d){ return d.text }));
 

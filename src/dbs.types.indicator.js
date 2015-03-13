@@ -1,16 +1,29 @@
 /**
- *	data: [
- *		{value: xxx, text: xxx}
- *	],
- *  on {
- * 		mouseover: function
- *		click: function
- *  }
+ * @file dbs.types.indicator.js
+ * @version 0.1.0
+ * @author Štěpán Kouba
+ * @license MIT
+ *
+ * @name DBS.Charts.Indicator
+ * @namespace
+ * 
+ * @description
+ * This file covers manipulation with Indicator. This chart requires font-awesome to be used.
+ * 
+ * Configuration object attributes of Indicator
+ * @example
+ * { 
+ *	data: [{value: XXX}],
+ *  on: {
+ * 		mouseover: function,
+ *		click: function,
+ *		...
+ *  },
  *	thresholds: [
- *		{icon: xxx, className: xxx, minVal: xxx, maxVal: xxx}
- *	]
- *	
- *  
+ *		{className: '', minVal: xxx, maxVal: xxx},
+ * 		{className: '', minVal: xxx, maxVal: xxx},
+ *		]
+ * }
  */
 
  'use strict';
@@ -37,7 +50,6 @@
 			throw Error('DBS: initiating indicator without thresholds');
 
 		this._thresholds.set(conf.thresholds);
-		this._thresholds.sort();
 
 		if (conf.on) {
 			this._onclick = conf.on.click || null;

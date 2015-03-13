@@ -8,7 +8,7 @@
 
 /**
  * @name DBS.Charts.Chart
- * @namespace
+ * @class
  * 
  * @description
  * predecessor for all chart objects, which defines all common functionality
@@ -16,7 +16,7 @@
 DBS.Charts.Chart = (function(){
 
 	/**
-	 * Threshoolds object
+	 * Threshoolds class
 	 * @name DBS.Charts.Chart.Thresholds
 	 * @class
 	 * @private
@@ -42,16 +42,22 @@ DBS.Charts.Chart = (function(){
 				return this._values;
 			},
 			/**
-			 * sets the valus
+			 * sets the values
 			 * @name DBS.Charts.Chart.Thresholds.get
 			 * @kind function
 			 * @param {Array} array of Objects {minVal, maxVal, className}
 			 */
 			set: function(val) {
 				this._values = val;
+
+				// always sort after set
+				// TODO implement binary array find, which keeps data sorted (~)
+				this.sort();
 			},
 			/**
-			 * sort values by minVal
+			 * sort the threshold values
+			 * @name DBS.Charts.Chart.Thresholds.sort
+			 * @kind function
 			 */
 			sort: function() {
 				this._values.sort(function(a, b) {
@@ -64,27 +70,29 @@ DBS.Charts.Chart = (function(){
 				});
 			},
 			/**
-			 * get minimal value. The values may not be sorted
-			 * @returns {Number}
+			 * get minimal value of the threshold
+			 * @name DBS.Charts.Chart.Thresholds.getMin
+			 * @kind function
+			 * @returns {Number} 
 			 */
 			getMin: function() {
-				this.sort();
-				
 				return this._values[0].minVal;
 			},
 			/**
-			 * get max value
-			 * @returns {Number}
+			 * get maximal value of the threshold
+			 * @name DBS.Charts.Chart.Thresholds.getMax
+			 * @kind function
+			 * @returns {Number} 
 			 */
 			getMax: function() {
-				this.sort();
-
 				return this._values[this._values.length - 1].maxVal;
 			},
 
 			/**
-			 * get the count
-			 * @returns {Number}
+			 * cound of set thresholds
+			 * @name DBS.Charts.Chart.Thresholds.count
+			 * @kind function
+			 * @returns {Number} 
 			 */
 			count: function() {
 				return this._values.length;
@@ -149,50 +157,86 @@ DBS.Charts.Chart = (function(){
 		 */
 		_thresholds: thresholds,
 		
+		/**
+		 * dbs object holding main properties for a DBS chart. Created by {@link DBS.create}
+		 *
+		 * @name DBS.Charts.Chart.dbs
+		 * @kind member
+		 * @type {DBS.Root}
+		 */
+		dbs: null,
+
+		/**
+		 * D3 object covering the whole DOM element. THis is used to create and modify the chart.
+		 * See charts implementations
+		 *
+		 * @name DBS.Charts.Chart._onmouseout
+		 * @kind member
+		 * @type {Object}
+		 * @private
+		 */
 		_chart: null,
+
+		/**
+		 * Title of the chart
+		 *
+		 * @name DBS.Charts.Chart._title
+		 * @kind member
+		 * @type {String}
+		 * @private
+		 */
 		_title: null,
-		_params: null, // additonal params
+
 		/**
-		 * create a chart like class name for any part of the 
+		 * Additional parameters of the chart. Should only be used with _onclick and other event handlers.
+		 * This attribute has no special order.
+		 *
+		 * @name DBS.Charts.Chart._params
+		 * @kind member
+		 * @type {Array}
+		 * @private
 		 */
-		getClassName: function(optName) {
-			optName = optName ? '-' + optName : '';
+		_params: null,
 
-			return 'dbs-chart-' + this.name + optName;
-		},
 		/**
-		 * use for CSS like selects using class name for any part of the 
+		 * data to be displayed by the chart
+		 *
+		 * @name DBS.Charts.Chart.data
+		 * @kind member
+		 * @type {Array}
 		 */
-		byClassName: function(optName) {
-			return '.' + this.getClassName(optName);
-		},
+		data: [],
+
 		/**
-		 *	creates initial classes for a chart
+		 * width of the chart
+		 *
+		 * @name DBS.Charts.Chart.w
+		 * @kind member
+		 * @type {Number}
 		 */
-		initClassName: function() {
-			return 'dbs-chart dbs-chart-' + this.name ;
-		},
-
-		/** TODO  general update method*/
-		update: function(data) {
-			this.data = data;
-
-			if (this.data.length > 0)
-				this._draw(this.data);
-		},
-
-		/** TODO  comment */
-		data: null,
-
-		/** TODO  comment */
 		w: null,
 
-		/** TODO  comment */
+		/**
+		 * height of the chart
+		 *
+		 * @name DBS.Charts.Chart.h
+		 * @kind member
+		 * @type {Number}
+		 */
 		h: null,
 
-		/** TODO comment */		
-		params: null,
+		/** @obsolete */		
+		//params: null,
 
+		/**
+		 * Margin object to be used for proper width and height calculation.
+		 * !! THIS IS NOT FULLY SUPPORTED YET !!
+		 * !! SO FAR USED ONLY ON BAR CHART !!
+		 *
+		 * @name DBS.Charts.Chart.margin
+		 * @kind member
+		 * @type {Object}
+		 */
 		margin: {
 			left: 0,
 			right: 0,
@@ -200,7 +244,150 @@ DBS.Charts.Chart = (function(){
 			bottom: 0
 		},
 
-		/** TODO comment */
+		/**
+		 * Init method, which is automatically called during creating a chart {@link DBS.create}. It creates all the
+		 * necessary configuration settings for a chart.
+		 *
+		 * @name DBS.Charts.Chart.init
+		 * @kind member
+		 * @type {Function}
+		 * @param {Object} conf configuration object. See details of a chart type
+		 */
+		init: function(conf){},
+
+		/**
+		 * Load method, which displays the chart. Usually calls _draw and _drawAxis methods.
+		 * Load method also prepares al the necessary internal functions, D3 objects, etc.
+		 *
+		 * @name DBS.Charts.Chart.load
+		 * @kind member
+		 * @type {Function}
+		 */
+		load: function(){},
+
+		/**
+		 * Ensures to draw a chart (based on the passed values). This method is called either by load method or 
+		 * update method.
+		 *
+		 * @name DBS.Charts.Chart._draw
+		 * @kind member
+		 * @type {Function}
+		 * @param {Array} values data to be displayed (usualy using {@link DBS.Charts.Chart.data})
+		 * @private
+		 */
+		_draw: function(values){},
+
+		/**
+		 * Ensures to draw what ever is needed for the chart in terms of axis
+		 *
+		 * @name DBS.Charts.Chart._drawAxis
+		 * @kind member
+		 * @type {Function}
+		 * @private
+		 */
+		_drawAxis: function(){},
+
+		/**
+		 * Ensures to draw title
+		 *
+		 * @name DBS.Charts.Chart._drawTitle
+		 * @kind member
+		 * @type {Function}
+		 * @private
+		 */
+		_drawTitle: function(){},
+
+		/**
+		 * Ensures to draw legend
+		 *
+		 * @name DBS.Charts.Chart._drawLegend
+		 * @kind member
+		 * @type {Function}
+		 * @private
+		 */
+		_drawLegend: function(){},
+
+		/**
+		 * Ensures to draw tooltip
+		 *
+		 * @name DBS.Charts.Chart._drawTooltip
+		 * @kind member
+		 * @type {Function}
+		 * @private
+		 */
+		_drawTooltip: function(){},
+
+		/**
+		 * Get proper class name for a chart. The class name has following structure:
+		 *  dbs-chart-CHART_NAME-ADDITIONAL_OPTIONS
+		 * See examples:
+		 *	dbs-chart-stackedbar-axis
+		 *  dbs-chart-gauge-needle-center
+		 *
+		 * @name DBS.Charts.Chart.getClassName
+		 * @kind member
+		 * @type {Function}
+		 * @param {String?} optName optional addendum to the class name
+		 * @returns {String} full class name
+		 */
+		getClassName: function(optName) {
+			optName = optName ? '-' + optName : '';
+
+			return 'dbs-chart-' + this.name + optName;
+		},
+
+		/**
+		 * Get proper class name to be used fo CSS like XPATH searches. I.e. it uses {@link DBS.Charts.Chart.getClassName}
+		 * and adds . (dot) at the beginning
+		 *
+		 * @name DBS.Charts.Chart.byClassName
+		 * @kind member
+		 * @type {Function}
+		 * @param {String?} optName optional addendum to the class name
+		 * @returns {String} full class name
+		 */
+		byClassName: function(optName) {
+			return '.' + this.getClassName(optName);
+		},
+
+		/**
+		 * Init class name of newly created chart. This has to be used when creating new chart.
+		 *
+		 * @name DBS.Charts.Chart.initClassName
+		 * @kind member
+		 * @type {Function}
+		 * @returns {String} full class name
+		 */
+		initClassName: function() {
+			return 'dbs-chart dbs-chart-' + this.name ;
+		},
+
+		/**
+		 * If not defined otherwise, this general method will be used to perform update of a chart.
+		 * It is simple and therefore expected to be ovewritten
+		 *
+		 * @name DBS.Charts.Chart.update
+		 * @kind member
+		 * @type {Function}
+		 * @param {Array} data to be used for udpate
+		 */
+		update: function(data) {
+			this.data = data;
+
+			if (this.data.length > 0)
+				this._draw(this.data);
+		},
+
+		/**
+		 * Calculate the width of the chart when using margins
+		 * !! THIS IS NOT FULLY IMPLEMENTED YET !!
+		 * !! DO NOT USE !!
+		 *
+		 * @name DBS.Charts.Chart.getWidth
+		 * @kind member
+		 * @type {Function}
+		 * 
+		 */
 		getWidth: function(type) {
 			var val;
 
@@ -221,7 +408,16 @@ DBS.Charts.Chart = (function(){
 			return val;
 		},
 
-		/** TODO comment */
+		/**
+		 * Set the width of the chart when using margins
+		 * !! THIS IS NOT FULLY IMPLEMENTED YET !!
+		 * !! DO NOT USE !!
+		 *
+		 * @name DBS.Charts.Chart.setWidth
+		 * @kind member
+		 * @type {Function}
+		 * 
+		 */
 		setWidth: function(type, value, margin) {
 			if (type === undefined)
 				throw new Error('DBS.Charts: can not get dimension without specifying type');
