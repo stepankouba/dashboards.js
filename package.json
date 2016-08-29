@@ -25,6 +25,7 @@
     "grunt-processhtml": "^0.3.3",
     "jshint": "^2.5.11",
     "mysql": "^2.5.4",
+    "nodegit": "^0.4.0",
     "q": "^1.1.2",
     "underscore": "^1.7.0",
     "watch": "^0.13.0"

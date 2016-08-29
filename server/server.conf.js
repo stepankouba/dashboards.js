@@ -8,10 +8,10 @@ module.exports = {
     // default values
     port: 8888,
     db: {
-        host: '192.168.10.54',
+        host: '192.168.10.50',
         user: 'search',
         password: '-123search',
-        database: 'redmine'
+        database: 'redmine_prod'
     },
     apiVersion: '0.1.0',
     commandLine: function() {
